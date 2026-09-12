@@ -4,7 +4,7 @@ import json
 import datetime
 from collections import defaultdict
 from typing import List, Dict, Any, Optional, Tuple, Set
-from pydantic import BaseModel, Field
+from dataclasses import dataclass, field
 import math
 import time
 import logging
@@ -12,19 +12,41 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+def find_repo_root() -> str:
+    """Finds the root repository directory regardless of execution working dir."""
+    if os.path.isdir('dataset'):
+        return os.path.abspath('.')
+    if os.path.isdir('../dataset'):
+        return os.path.abspath('..')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(script_dir)
+    if os.path.isdir(os.path.join(parent_dir, 'dataset')):
+        return parent_dir
+    if os.path.isdir(os.path.join(script_dir, 'dataset')):
+        return script_dir
+    return os.path.abspath('.')
+
+REPO_ROOT = find_repo_root()
+DATA_DIR = os.path.join(REPO_ROOT, 'dataset')
+OUTPUT_CSV_PATH = os.path.join(REPO_ROOT, 'output.csv')
+EVAL_DIR = os.path.join(REPO_ROOT, 'evaluation')
+USAGE_REPORT_PATH = os.path.join(EVAL_DIR, 'usage_report.md')
+
 # Auto-load .env configuration if present
-if os.path.exists('.env'):
-    try:
-        with open('.env') as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith('#') and '=' in line:
-                    k, v = line.split('=', 1)
-                    k, v = k.strip(), v.strip().strip("'").strip('"')
-                    if k and v and k not in os.environ:
-                        os.environ[k] = v
-    except Exception as e:
-        logger.warning(f"Error loading .env: {e}")
+for env_path in [os.path.join(REPO_ROOT, '.env'), '.env', '../.env']:
+    if os.path.exists(env_path):
+        try:
+            with open(env_path) as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#') and '=' in line:
+                        k, v = line.split('=', 1)
+                        k, v = k.strip(), v.strip().strip("'").strip('"')
+                        if k and v and k not in os.environ:
+                            os.environ[k] = v
+            break
+        except Exception as e:
+            logger.warning(f"Error loading .env from {env_path}: {e}")
 
 def parse_date(date_str: str) -> datetime.date:
     return datetime.datetime.strptime(date_str.strip(), "%Y-%m-%d").date()
@@ -138,8 +160,8 @@ def resolve_linked_events(raw_events: List[FinancialEvent]) -> List[FinancialEve
     return filtered
 
 class DataLoader:
-    def __init__(self, data_dir='dataset'):
-        self.data_dir = data_dir
+    def __init__(self, data_dir: Optional[str] = None):
+        self.data_dir = data_dir or DATA_DIR
         self.profiles: Dict[str, UserProfile] = {}
         self.requests: List[Request] = []
         self.events: List[FinancialEvent] = []
@@ -201,19 +223,22 @@ class DataLoader:
             for row in csv.DictReader(f):
                 self.messages[row['user_id']].append(row)
 
-class SalaryUpdate(BaseModel):
+@dataclass
+class SalaryUpdate:
     new_amount: Optional[float] = None
     new_day: Optional[int] = None
     is_ended: bool = False
 
-class ExpenseUpdate(BaseModel):
+@dataclass
+class ExpenseUpdate:
     category: str
     percentage_increase: Optional[float] = None
     new_amount: Optional[float] = None
 
-class MessageInsights(BaseModel):
+@dataclass
+class MessageInsights:
     salary_update: Optional[SalaryUpdate] = None
-    expense_updates: List[ExpenseUpdate] = Field(default_factory=list)
+    expense_updates: List[ExpenseUpdate] = field(default_factory=list)
 
 class LLMClient:
     def __init__(self):
@@ -550,13 +575,14 @@ def find_earliest_date(daily_balances: List[float], min_keep: float, requested: 
             return req_date + datetime.timedelta(days=d)
     return None
 
-class Plan(BaseModel):
+@dataclass
+class Plan:
     method: str
     status: str
-    payments: List[Tuple[str, float]]
-    total: float
+    payments: List[Tuple[str, float]] = field(default_factory=list)
+    total: float = 0.0
     option_id: Optional[str] = None
-    changes: List[str] = Field(default_factory=list)
+    changes: List[str] = field(default_factory=list)
 
 def select_payment_plan(profile: UserProfile, req: Request, amount_safe: float, earliest_date: Optional[datetime.date], options: List[PaymentOption], daily_balances: Optional[List[float]] = None, changes: Optional[List[str]] = None) -> Optional[Plan]:
     candidates: List[Plan] = []
@@ -774,9 +800,10 @@ class ValidationEngine:
             if earliest != format_date(req.request_date):
                 raise ValueError(f"affordable_now must have earliest_date == request_date, got {earliest}")
 
-def process_requests(data_dir='dataset') -> Tuple[List[dict], LLMClient]:
+def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMClient]:
+    target_dir = data_dir or DATA_DIR
     llm = LLMClient()
-    loader = DataLoader(data_dir)
+    loader = DataLoader(target_dir)
     loader.load_all(llm=llm)
     
     out_rows = []
@@ -786,7 +813,7 @@ def process_requests(data_dir='dataset') -> Tuple[List[dict], LLMClient]:
     
     # Load known sample requests for spot check filtering
     sample_req_ids = set()
-    sample_path = os.path.join(data_dir, 'sample_requests.csv')
+    sample_path = os.path.join(target_dir, 'sample_requests.csv')
     if os.path.exists(sample_path):
         with open(sample_path) as f:
             for r in csv.DictReader(f):
@@ -904,7 +931,7 @@ def process_requests(data_dir='dataset') -> Tuple[List[dict], LLMClient]:
             })
 
     # Write output.csv at repo root
-    with open('output.csv', 'w', newline='') as f:
+    with open(OUTPUT_CSV_PATH, 'w', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=[
             'request_id', 'amount_safe_to_pay', 'affordability_status',
             'recommended_payment_method', 'payment_plan', 'earliest_date_for_full_payment',
@@ -912,6 +939,7 @@ def process_requests(data_dir='dataset') -> Tuple[List[dict], LLMClient]:
         ])
         writer.writeheader()
         writer.writerows(out_rows)
+    print(f"Written output predictions to {OUTPUT_CSV_PATH}")
 
     print("\n=================== 250-ROW FULL DATASET RESULTS ===================")
     print("AFFORDABILITY STATUS DISTRIBUTION:")
@@ -929,8 +957,8 @@ def process_requests(data_dir='dataset') -> Tuple[List[dict], LLMClient]:
     return out_rows, llm
 
 def generate_usage_report(llm: Optional[LLMClient] = None):
-    os.makedirs('evaluation', exist_ok=True)
-    report_path = 'evaluation/usage_report.md'
+    os.makedirs(EVAL_DIR, exist_ok=True)
+    report_path = USAGE_REPORT_PATH
     
     if llm and llm.total_calls > 0:
         total_calls = llm.total_calls
@@ -981,7 +1009,29 @@ This report summarizes the model calls, token consumption, and cost analysis for
         f.write(content)
     print(f"Generated {report_path}")
 
+def package_solution():
+    import zipfile
+    zip_path = os.path.join(REPO_ROOT, 'code.zip')
+    print(f"\nPackaging submission archive to {zip_path}...")
+    files_to_pack = [
+        ('code/main.py', os.path.join(REPO_ROOT, 'code', 'main.py')),
+        ('code/requirements.txt', os.path.join(REPO_ROOT, 'code', 'requirements.txt')),
+        ('code/README.md', os.path.join(REPO_ROOT, 'code', 'README.md')),
+        ('code/test_safe_amount.py', os.path.join(REPO_ROOT, 'code', 'test_safe_amount.py')),
+        ('evaluation/usage_report.md', os.path.join(REPO_ROOT, 'evaluation', 'usage_report.md')),
+    ]
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as z:
+        for arcname, fpath in files_to_pack:
+            if os.path.exists(fpath):
+                z.write(fpath, arcname)
+                print(f"  + Added {arcname}")
+            else:
+                print(f"  ! Warning: {fpath} not found")
+    print(f"Submission archive created successfully: {zip_path}\n")
+
 if __name__ == '__main__':
     import sys
     out_rows, llm = process_requests()
     generate_usage_report(llm)
+    if '--package' in sys.argv:
+        package_solution()
