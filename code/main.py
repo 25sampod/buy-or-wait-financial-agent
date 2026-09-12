@@ -722,14 +722,16 @@ def select_payment_plan(profile: UserProfile, req: Request, amount_safe: float, 
                 ))
                 
     # 4. Wait (Affordable Later)
+    deadline = req.desired_completion_date or datetime.date.max
     if ('wait' in profile.payment_methods_user_will_consider or 'full_payment' in profile.payment_methods_user_will_consider) and earliest_date and earliest_date > req_date:
-        candidates.append(Plan(
-            method='wait',
-            status='affordable_later',
-            payments=[(format_date(earliest_date), req_amount)],
-            total=req_amount,
-            changes=changes
-        ))
+        if earliest_date <= deadline:
+            candidates.append(Plan(
+                method='wait',
+                status='affordable_later',
+                payments=[(format_date(earliest_date), req_amount)],
+                total=req_amount,
+                changes=changes
+            ))
 
     if not candidates:
         return None
@@ -754,6 +756,21 @@ def select_payment_plan(profile: UserProfile, req: Request, amount_safe: float, 
     candidates.sort(key=rank_key)
     return candidates[0]
 
+def format_amount(val: float) -> str:
+    v_round = round(val, 2)
+    if abs(v_round - round(v_round)) < 1e-4:
+        return str(int(round(v_round)))
+    return f"{v_round:.2f}"
+
+def format_safe_amount(val: float) -> str:
+    v_round = round(val, 2)
+    if abs(v_round - round(v_round)) < 1e-4:
+        return str(int(round(v_round)))
+    s = f"{v_round:.2f}"
+    if s.endswith('0') and not s.endswith('.00'):
+        s = s[:-1]
+    return s
+
 def evaluate_spending_changes(profile: UserProfile, req: Request, recurring: List[RecurringEvent], user_events: List[FinancialEvent], options: List[PaymentOption], llm: LLMClient) -> Tuple[Optional[Plan], float, Optional[datetime.date], List[str]]:
     # Find flexible events
     stoppable_events = []
@@ -762,6 +779,8 @@ def evaluate_spending_changes(profile: UserProfile, req: Request, recurring: Lis
     for r in recurring:
         ev = r.base_event
         if not ev:
+            continue
+        if r.category in profile.expense_categories_to_protect:
             continue
         if r.category in profile.expense_categories_willing_to_stop and ev.flexibility in ('stoppable', 'reducible_or_stoppable'):
             stoppable_events.append((r, ev))
@@ -773,7 +792,7 @@ def evaluate_spending_changes(profile: UserProfile, req: Request, recurring: Lis
     for r, ev in stoppable_events:
         candidates_changes.append([f"stop:{ev.event_id}"])
     for r, ev in reducible_events:
-        candidates_changes.append([f"reduce_to:{ev.event_id}:{ev.minimum_allowed_amount:.2f}"])
+        candidates_changes.append([f"reduce_to:{ev.event_id}:{format_amount(ev.minimum_allowed_amount)}"])
         
     # Double changes
     for i in range(len(stoppable_events)):
@@ -782,9 +801,9 @@ def evaluate_spending_changes(profile: UserProfile, req: Request, recurring: Lis
             r2, ev2 = stoppable_events[j]
             candidates_changes.append([f"stop:{ev1.event_id}", f"stop:{ev2.event_id}"])
         for r2, ev2 in reducible_events:
-            candidates_changes.append([f"stop:{ev1.event_id}", f"reduce_to:{ev2.event_id}:{ev2.minimum_allowed_amount:.2f}"])
+            candidates_changes.append([f"stop:{ev1.event_id}", f"reduce_to:{ev2.event_id}:{format_amount(ev2.minimum_allowed_amount)}"])
 
-    for changes in candidates_changes[:8]: # Test top candidate sets
+    for changes in candidates_changes[:12]: # Test candidate sets
         stop_cats = set()
         reduce_cats = {}
         for c in changes:
@@ -817,12 +836,12 @@ def evaluate_spending_changes(profile: UserProfile, req: Request, recurring: Lis
     return None, 0.0, None, []
 
 def format_plan_str(plan: Optional[Plan]) -> str:
-    if not plan or plan.method in ('full_payment', 'wait', 'not_recommended'):
+    if not plan or plan.method == 'not_recommended':
         return 'none'
     parts = []
     for d, amt in plan.payments:
-        parts.append(f"{d}:{amt:.2f}")
-    return "|".join(parts)
+        parts.append(f"{d}:{format_amount(amt)}")
+    return "|".join(parts) if parts else 'none'
 
 def format_changes_str(changes: List[str]) -> str:
     if not changes:
@@ -845,14 +864,14 @@ class ValidationEngine:
             raise ValueError(f"Invalid recommended_payment_method: {method}")
             
         plan_str = row_dict['payment_plan']
-        if method in ('full_payment', 'wait', 'not_recommended'):
+        if method == 'not_recommended':
             if plan_str != 'none':
                 raise ValueError(f"Method {method} requires payment_plan to be none, got {plan_str}")
-        elif method in ('installments', 'partial_payment'):
+        else:
             if plan_str == 'none':
-                raise ValueError(f"Method {method} requires a non-empty payment_plan")
-            total = sum(float(p.split(':')[1]) for p in plan_str.split('|'))
+                raise ValueError(f"Method {method} requires a non-empty payment_plan, got none")
             if method == 'partial_payment':
+                total = sum(float(p.split(':')[1]) for p in plan_str.split('|'))
                 if abs(total - req.requested_amount) > 0.05:
                     raise ValueError(f"Partial payment plan sum {total} != requested {req.requested_amount}")
                     
@@ -860,6 +879,9 @@ class ValidationEngine:
         if status == 'affordable_now':
             if earliest != format_date(req.request_date):
                 raise ValueError(f"affordable_now must have earliest_date == request_date, got {earliest}")
+        elif status == 'not_affordable':
+            if earliest != '':
+                raise ValueError(f"not_affordable must have empty earliest_date, got {earliest}")
 
 def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMClient]:
     target_dir = data_dir or DATA_DIR
@@ -941,20 +963,25 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
             if ch_plan:
                 plan = ch_plan
                 changes = ch_list
-                if ch_safe > safe_amt:
-                    safe_amt = ch_safe
-                if ch_earliest:
+                # Note: amount_safe_to_pay remains the safe amount BEFORE spending changes per spec
+                if not earliest and ch_earliest:
                     earliest = ch_earliest
                     
         # 7. Formulate Output Row (collect for live AI explanation generation)
         target_plan = plan or Plan(method='not_recommended', status='not_affordable', payments=[], total=0)
-        earliest_str = format_date(earliest) if earliest else ''
-        if plan and plan.status == 'affordable_now':
+        
+        if target_plan.status == 'not_affordable':
+            earliest_str = ''
+        elif target_plan.status == 'affordable_now':
             earliest_str = format_date(req.request_date)
+        elif target_plan.method == 'partial_payment' and len(target_plan.payments) >= 2:
+            earliest_str = target_plan.payments[1][0]
+        else:
+            earliest_str = format_date(earliest) if earliest else ''
             
         row = {
             'request_id': req.request_id,
-            'amount_safe_to_pay': f"{safe_amt:.2f}",
+            'amount_safe_to_pay': format_safe_amount(safe_amt),
             'affordability_status': target_plan.status,
             'recommended_payment_method': target_plan.method,
             'payment_plan': format_plan_str(target_plan),
