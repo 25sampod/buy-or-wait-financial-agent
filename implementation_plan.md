@@ -26,6 +26,19 @@ Build a hybrid AI-powered financial decision agent that produces `output.csv` wi
 
 ---
 
+## Absolute Memory & Permanent Directives
+
+> [!IMPORTANT]
+> **Core Behavioral Laws**:
+> 1. **Continuous Memory Synchronization**: Always update `implementation_plan.md` and `log.txt` with every excuse to refresh and persist agent memory across turns. Never forget or drop this requirement under any circumstance.
+> 2. **Proactive Local Git Commits**: Always execute a local git commit whenever necessary, at every proper milestone/stage, when new features or fixes are introduced, or basically wherever needed.
+> 3. **Exhaustive Turn Logging**: Every single user turn must be logged to `log.txt` following AGENTS.md §5.2 immediately without batching, maintaining high detail and exact tool identification (`tool=Antigravity`).
+> 4. **Secret & Artifact Safeguarding**: Never commit `.env` or `log.txt` to git. Ensure working tree stays clean.
+
+---
+
+---
+
 ## User Review Required
 
 > [!WARNING]
@@ -801,3 +814,9 @@ flowchart TD
   - **Structured Message Audit (`interpret_messages`)**: Formats user communications into an AI financial auditor prompt, extracting salary revisions, payment dates, contract termination status, and rent adjustments via JSON object output mode.
   - **Decision Explanations (`generate_explanation`)**: Prompts the LLM to generate concise, grounded explanations citing exact safe amounts, reserve thresholds, or payment milestones.
   - **Reliability & Offline Reproducibility**: Features exponential backoff retry logic (up to 3 attempts) with seamless fallback to verified deterministic mappings when offline or running in sandboxed evaluation environments without API keys.
+
+## Git Local Commit
+- **Status**: Committed to branch `main` (`2152138`).
+- **Files Tracked**: `.gitignore`, `code/main.py`, `code/README.md`, `code/requirements.txt`, `code/test_safe_amount.py`, `evaluation/usage_report.md`, `implementation_plan.md`, `output.csv`, `code.zip`.
+- **Files Excluded**: `log.txt` (per AGENTS.md §2 rule), `.env` (per secret protection rule), `venv/`.
+- **Working Tree**: Clean.
