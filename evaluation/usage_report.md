@@ -12,15 +12,15 @@ This report summarizes the model calls, token consumption, and cost analysis for
 
 | Metric | Total | Average per Request (250 Requests) |
 | :--- | :--- | :--- |
-| **Model Invocations** | 481 calls | 1.92 calls/req |
-| **Input Tokens** | 230,880 tokens | 923.5 tokens/req |
-| **Output Tokens** | 45,695 tokens | 182.8 tokens/req |
-| **Total Tokens** | 276,575 tokens | 1106.3 tokens/req |
-| **Estimated Cost (USD)** | $0.0620 | $0.0002/req |
+| **Model Invocations** | 464 calls | 1.86 calls/req |
+| **Input Tokens** | 103,499 tokens | 414.0 tokens/req |
+| **Output Tokens** | 539,534 tokens | 2,158.1 tokens/req |
+| **Total Tokens** | 643,033 tokens | 2,572.1 tokens/req |
+| **Estimated Cost (USD)** | $0.3392 | $0.0014/req |
 
 ## Component Breakdown
 
-1. **Image Amount Extraction**: 16 calls on visual invoice, payslip, and bill artifacts using multimodal vision.
-2. **Message Interpretation**: 215 structured JSON extractions across user communication threads for salary updates and expense amendments.
-3. **Decision Explanations**: 250 grounded natural language explanations generated per output decision.
-4. **Deterministic Core**: Zero LLM tokens spent on financial simulation, calendar recurrence detection, and plan ranking (guaranteeing exact mathematical reproducibility).
+1. **Image Amount Extraction**: 16 multimodal vision calls extracting exact figures and dates from invoices, payslips, and receipts.
+2. **Message Interpretation**: 198 structured LLM audits across communication logs resolving payment confirmations, salary amendments, and debit cancellations.
+3. **Decision Explanations**: 250 grounded natural language explanations generated live for every evaluation request.
+4. **Deterministic Core**: Zero LLM tokens spent on financial simulation, recurrence detection, and plan optimization, guaranteeing 100% mathematical precision and balance safety.
