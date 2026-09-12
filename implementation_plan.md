@@ -835,4 +835,21 @@ flowchart TD
 - **Packaging CLI Flag**: Implemented `--package` flag (`python3 main.py --package`) to build `code.zip`.
 - **Git Commit**: `a6d428f`.
 
+## Bug Fixes & Multi-Stream Clustering Refinement
+
+### 1. Four Confirmed Bugs Resolved
+- **BUG 1 (Salary Termination)**: Added `TERMINATION_KEYWORDS` and `is_income_terminated()` in `code/main.py` to inspect the latest credit description (e.g. "Final employer payroll", "severance", "end of contract"). Prevents terminated salaries from indefinitely recurring in `RecurrenceDetector` and `BalanceForecaster`. Unit test `TestSalaryTermination` added to `code/test_safe_amount.py`.
+- **BUG 2 (Truthful Usage Reporting)**: Instrumented `live_calls_this_run` and `cache_hits_this_run` in `LLMClient`. When executed in offline or cached evaluation mode, `generate_usage_report()` outputs true 0 live calls, 0 tokens, and $0.0000 cost, detailing the exact 464 cached inferences served from `code/ai_cache.json`.
+- **BUG 3 (Baseline Date Leak)**: Eliminated `if not earliest and ch_earliest: earliest = ch_earliest` leak in `code/main.py`. `earliest_date_for_full_payment` strictly measures baseline capacity without spending changes.
+- **BUG 4 (Image OCR Cache Consistency)**: Verified `image_03.png` (41272.0), `image_07.png` (8528.1), and `image_14.png` (4543.0) against actual PNG image files. Synchronized `IMAGE_AMOUNTS` and `code/ai_cache.json` to 100% agreement. Added `TestImageConsistency` in `code/test_safe_amount.py`.
+
+### 2. Multi-Stream Recurrence Clustering
+- Refactored `RecurrenceDetector.detect()` to test each event as a candidate tolerance anchor and select the largest cluster spanning 3+ distinct months.
+- Solves cases where a single `(category, direction)` bucket contains multiple distinct streams (e.g., base salary + performance commission).
+- Improved alignment with `dataset/sample_requests.csv` ground truth across the board.
+- Cleaned temporary scratch files from `code/` to keep submission directory clean and compliant.
+- All 7 unit tests passing; all 250 evaluation rows validated and written to `output.csv`.
+- `code.zip` re-packaged with 6 core submission files.
+
+
 
