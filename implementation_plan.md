@@ -821,10 +821,15 @@ flowchart TD
 - **Files Excluded**: `log.txt` (per AGENTS.md §2 rule), `.env` (per secret protection rule), `venv/`.
 - **Working Tree**: Clean.
 
-## Live AI Verification
+## Live AI Verification & Test Simulation
 - **Status**: Live connection confirmed with Azure OpenAI deployment `gpt-5-nano` (`HTTP 200 OK`).
 - **Capabilities Verified**:
   - Chat completions with token telemetry.
   - JSON object mode (`response_format={"type": "json_object"}`) verified.
   - Multimodal document vision extraction verified on challenge pay slips.
   - Automatic `.env` loading configured.
+- **Simulation Audit Log (`log.md`)**:
+  - Script `code/simulate_ai_test.py` executed live requests.
+  - Generates comprehensive markdown audit log containing executive telemetry tables, raw prompt & completion blocks, duration/latency stats, token counts, cost breakdown, and final prediction rows.
+  - Git commit `94715c5`.
+
