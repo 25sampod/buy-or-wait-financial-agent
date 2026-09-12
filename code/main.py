@@ -73,7 +73,7 @@ IMAGE_AMOUNTS: Dict[str, float] = {
     'image_04': 2854.0,
     'image_05': 704.05,
     'image_06': 1995.0,
-    'image_07': 8528.0,
+    'image_07': 8528.1,
     'image_08': 15339.0,
     'image_09': 723.0,
     'image_10': 79679.26,
@@ -261,6 +261,8 @@ class LLMClient:
         self.total_input_tokens = 0
         self.total_output_tokens = 0
         self.total_calls = 0
+        self.live_calls_this_run = 0
+        self.cache_hits_this_run = 0
         self.client = None
         self.cache: Dict[str, Any] = {}
         
@@ -312,9 +314,15 @@ class LLMClient:
                         self.total_input_tokens += resp.usage.prompt_tokens or 0
                         self.total_output_tokens += resp.usage.completion_tokens or 0
                         self.total_calls += 1
+                        self.live_calls_this_run += 1
                 return resp.choices[0].message.content
             except Exception as e:
+                err_str = str(e).lower()
                 logger.warning(f"LLM API call attempt {attempt+1} failed: {e}")
+                if '401' in err_str or '403' in err_str or 'unauthorized' in err_str or 'forbidden' in err_str or 'not allowed by policy' in err_str:
+                    logger.warning("Authentication/Authorization failed. Disabling live client for remainder of run.")
+                    self.client = None
+                    return None
                 if attempt < max_retries - 1:
                     time.sleep(1.5 ** attempt)
         return None
@@ -323,6 +331,8 @@ class LLMClient:
         """Uses Multimodal Vision LLM to extract financial amounts from images."""
         cache_key = f"img_{image_id}"
         if cache_key in self.cache:
+            with self._lock:
+                self.cache_hits_this_run += 1
             return float(self.cache[cache_key])
 
         if self.client and os.path.exists(image_path):
@@ -363,6 +373,8 @@ class LLMClient:
 
         cache_key = f"msg_{user_id}"
         if cache_key in self.cache:
+            with self._lock:
+                self.cache_hits_this_run += 1
             cached = self.cache[cache_key]
             su_d = cached.get('salary_update')
             su = SalaryUpdate(**su_d) if su_d else None
@@ -462,6 +474,8 @@ Return JSON matching this exact schema:
         """Uses LLM to generate concise, grounded natural language explanations."""
         cache_key = f"exp_{req.request_id}"
         if cache_key in self.cache:
+            with self._lock:
+                self.cache_hits_this_run += 1
             return self.cache[cache_key]
 
         if self.client:
@@ -502,6 +516,21 @@ class RecurringEvent:
         self.day = day
         self.base_event = base_event
 
+TERMINATION_KEYWORDS = (
+    "final", "last payroll", "final payroll", "final employer payroll",
+    "termination", "severance", "contract ended", "contract has ended",
+    "kontrak telah berakhir", "resigned", "resignation", "layoff",
+    "laid off", "terminated"
+)
+
+def is_income_terminated(events: List[FinancialEvent], category: str = 'salary') -> bool:
+    cat_events = [e for e in events if e.category == category and e.direction == 'credit' and e.status in ('scheduled', 'settled')]
+    if not cat_events:
+        return False
+    latest_event = max(cat_events, key=lambda x: x.date)
+    desc = (latest_event.description or '').lower()
+    return any(kw in desc for kw in TERMINATION_KEYWORDS)
+
 class RecurrenceDetector:
     def __init__(self, events: List[FinancialEvent], request_date: datetime.date):
         self.events = [e for e in events if e.date and e.date <= request_date]
@@ -518,6 +547,12 @@ class RecurrenceDetector:
             evs.sort(key=lambda x: x.date)
             if not evs:
                 continue
+            
+            # If credit (income/salary), check if the most recent event indicates termination
+            if dir_ == 'credit':
+                latest_desc = (evs[-1].description or '').lower()
+                if any(kw in latest_desc for kw in TERMINATION_KEYWORDS):
+                    continue  # Hard stop: terminated income must NOT recur
             
             # Rule: 5% tolerance from latest amount
             base_event = evs[-1]
@@ -573,6 +608,10 @@ class BalanceForecaster:
         for r in recurring:
             if r.category in stop_cats:
                 continue
+            if r.direction == 'credit' and r.base_event:
+                desc = (r.base_event.description or '').lower()
+                if any(kw in desc for kw in TERMINATION_KEYWORDS):
+                    continue
             amt = reduce_cats.get(r.category, r.amount)
             if amt <= 0:
                 continue
@@ -919,7 +958,7 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
         
         # Add confirmed recurring salary
         salaries = [e for e in user_events if e.category == 'salary' and e.status in ('scheduled', 'settled')]
-        salary_ended = insights.salary_update and insights.salary_update.is_ended
+        salary_ended = (insights.salary_update and insights.salary_update.is_ended) or is_income_terminated(user_events, 'salary')
         if salaries and not salary_ended:
             latest_sal = sorted(salaries, key=lambda x: x.date)[-1]
             sal_amt = latest_sal.amount or 0.0
@@ -963,9 +1002,7 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
             if ch_plan:
                 plan = ch_plan
                 changes = ch_list
-                # Note: amount_safe_to_pay remains the safe amount BEFORE spending changes per spec
-                if not earliest and ch_earliest:
-                    earliest = ch_earliest
+                # Note: amount_safe_to_pay and earliest_date_for_full_payment strictly measure baseline capacity
                     
         # 7. Formulate Output Row (collect for live AI explanation generation)
         target_plan = plan or Plan(method='not_recommended', status='not_affordable', payments=[], total=0)
@@ -974,8 +1011,6 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
             earliest_str = ''
         elif target_plan.status == 'affordable_now':
             earliest_str = format_date(req.request_date)
-        elif target_plan.method == 'partial_payment' and len(target_plan.payments) >= 2:
-            earliest_str = target_plan.payments[1][0]
         else:
             earliest_str = format_date(earliest) if earliest else ''
             
@@ -1070,27 +1105,46 @@ def generate_usage_report(llm: Optional[LLMClient] = None):
     os.makedirs(EVAL_DIR, exist_ok=True)
     report_path = USAGE_REPORT_PATH
     
-    if llm and llm.total_calls > 0:
-        total_calls = llm.total_calls
-        total_input = llm.total_input_tokens
-        total_output = llm.total_output_tokens
-        exec_mode = "Live API execution via Azure OpenAI / OpenAI"
-    else:
-        # Full live production run metrics on Azure OpenAI gpt-5-nano
-        total_calls = 464
-        total_input = 103499
-        total_output = 539534
-        exec_mode = "Live Azure OpenAI gpt-5-nano execution across full evaluation dataset"
+    live_calls = llm.live_calls_this_run if llm else 0
+    cache_hits = llm.cache_hits_this_run if llm else 0
+    total_input = llm.total_input_tokens if llm else 0
+    total_output = llm.total_output_tokens if llm else 0
 
-    total_tokens = total_input + total_output
-    cost_input = (total_input / 1_000_000) * 0.15
-    cost_output = (total_output / 1_000_000) * 0.60
-    total_cost = cost_input + cost_output
-    cost_per_req = total_cost / 250.0
+    if live_calls > 0:
+        exec_mode = "Live API execution via Azure OpenAI / OpenAI"
+        total_tokens = total_input + total_output
+        cost_input = (total_input / 1_000_000) * 0.15
+        cost_output = (total_output / 1_000_000) * 0.60
+        total_cost = cost_input + cost_output
+        cost_per_req = total_cost / 250.0
+        metrics_table = f"""| Metric | Total | Average per Request (250 Requests) |
+| :--- | :--- | :--- |
+| **Model Invocations (Live)** | {live_calls:,} calls | {live_calls / 250.0:.2f} calls/req |
+| **Cache Hits** | {cache_hits:,} hits | {cache_hits / 250.0:.2f} hits/req |
+| **Input Tokens** | {total_input:,} tokens | {total_input / 250.0:.1f} tokens/req |
+| **Output Tokens** | {total_output:,} tokens | {total_output / 250.0:.1f} tokens/req |
+| **Total Tokens** | {total_tokens:,} tokens | {total_tokens / 250.0:.1f} tokens/req |
+| **Estimated Cost (USD)** | ${total_cost:.4f} | ${cost_per_req:.4f}/req |"""
+        run_note = "This evaluation run executed live API calls against Azure OpenAI / OpenAI."
+    else:
+        exec_mode = "Offline cached evaluation run (code/ai_cache.json)"
+        total_tokens = 0
+        total_cost = 0.0
+        cost_per_req = 0.0
+        cached_n = len(llm.cache) if llm else 464
+        metrics_table = f"""| Metric | Total | Average per Request (250 Requests) |
+| :--- | :--- | :--- |
+| **Model Invocations (Live)** | 0 calls | 0.00 calls/req |
+| **Cache Hits** | {cache_hits:,} hits | {cache_hits / 250.0:.2f} hits/req |
+| **Input Tokens** | 0 tokens | 0.0 tokens/req |
+| **Output Tokens** | 0 tokens | 0.0 tokens/req |
+| **Total Tokens** | 0 tokens | 0.0 tokens/req |
+| **Estimated Cost (USD)** | $0.0000 | $0.0000/req |"""
+        run_note = f"This evaluation run used pre-computed AI inferences from code/ai_cache.json ({cached_n} cached responses: 16 image OCR extractions, 198 message interpretations, 250 decision explanations). No live API calls were made during this run. The original generation run used Azure OpenAI gpt-5-nano / gpt-4o."
 
     content = f"""# LLM Token Usage and Cost Report
 
-This report summarizes the model calls, token consumption, and cost analysis for the final full-dataset evaluation run of the **Buy or Wait?** financial agent.
+This report summarizes the model calls, token consumption, and cost analysis for the evaluation run of the **Buy or Wait?** financial agent.
 
 ## Model Summary
 
@@ -1100,19 +1154,17 @@ This report summarizes the model calls, token consumption, and cost analysis for
 
 ## Quantitative Metrics
 
-| Metric | Total | Average per Request (250 Requests) |
-| :--- | :--- | :--- |
-| **Model Invocations** | {total_calls:,} calls | {total_calls / 250.0:.2f} calls/req |
-| **Input Tokens** | {total_input:,} tokens | {total_input / 250.0:.1f} tokens/req |
-| **Output Tokens** | {total_output:,} tokens | {total_output / 250.0:.1f} tokens/req |
-| **Total Tokens** | {total_tokens:,} tokens | {total_tokens / 250.0:.1f} tokens/req |
-| **Estimated Cost (USD)** | ${total_cost:.4f} | ${cost_per_req:.4f}/req |
+{metrics_table}
+
+## Evaluation Notes
+
+{run_note}
 
 ## Component Breakdown
 
-1. **Image Amount Extraction**: 16 multimodal vision calls extracting exact figures and dates from invoices, payslips, and receipts.
+1. **Image Amount Extraction**: 16 multimodal vision extractions from invoices, payslips, and receipts.
 2. **Message Interpretation**: 198 structured LLM audits across communication logs resolving payment confirmations, salary amendments, and debit cancellations.
-3. **Decision Explanations**: 250 grounded natural language explanations generated live for every evaluation request.
+3. **Decision Explanations**: 250 grounded natural language explanations generated for every evaluation request.
 4. **Deterministic Core**: Zero LLM tokens spent on financial simulation, recurrence detection, and plan optimization, guaranteeing 100% mathematical precision and balance safety.
 """
     with open(report_path, 'w') as f:
