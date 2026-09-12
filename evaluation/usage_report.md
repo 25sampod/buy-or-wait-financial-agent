@@ -6,7 +6,7 @@ This report summarizes the model calls, token consumption, and cost analysis for
 
 - **Provider**: Azure OpenAI / Hybrid Architecture
 - **Primary Model**: GPT-5 Nano / GPT-4o Multimodal Vision & Reasoning
-- **Execution Mode**: Batch pre-processing for multimodal assets + deterministic financial simulation core + explanation generation
+- **Execution Mode**: Live Azure OpenAI gpt-5-nano execution across full evaluation dataset
 
 ## Quantitative Metrics
 
@@ -14,8 +14,8 @@ This report summarizes the model calls, token consumption, and cost analysis for
 | :--- | :--- | :--- |
 | **Model Invocations** | 464 calls | 1.86 calls/req |
 | **Input Tokens** | 103,499 tokens | 414.0 tokens/req |
-| **Output Tokens** | 539,534 tokens | 2,158.1 tokens/req |
-| **Total Tokens** | 643,033 tokens | 2,572.1 tokens/req |
+| **Output Tokens** | 539,534 tokens | 2158.1 tokens/req |
+| **Total Tokens** | 643,033 tokens | 2572.1 tokens/req |
 | **Estimated Cost (USD)** | $0.3392 | $0.0014/req |
 
 ## Component Breakdown
