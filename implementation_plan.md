@@ -828,8 +828,11 @@ flowchart TD
   - JSON object mode (`response_format={"type": "json_object"}`) verified.
   - Multimodal document vision extraction verified on challenge pay slips.
   - Automatic `.env` loading configured.
-- **Simulation Audit Log (`log.md`)**:
-  - Script `code/simulate_ai_test.py` executed live requests.
-  - Generates comprehensive markdown audit log containing executive telemetry tables, raw prompt & completion blocks, duration/latency stats, token counts, cost breakdown, and final prediction rows.
-  - Git commit `94715c5`.
+## Zero-Dependency & Environment Agnostic Execution
+- **Status**: Verified running with vanilla system Python 3 (`/usr/bin/python3`).
+- **Pydantic Elimination**: Refactored `SalaryUpdate`, `ExpenseUpdate`, `MessageInsights`, and `Plan` to Python standard library `dataclasses` (`@dataclass` and `field`). Evaluators need 0 pip packages to run the core pipeline.
+- **Repository Root & Path Auto-Detection**: Automatically identifies repository root whether invoked from repo root (`python3 code/main.py`) or inside `code/` (`cd code && python3 main.py`), resolving `dataset/`, `output.csv`, `evaluation/usage_report.md`, and `.env`.
+- **Packaging CLI Flag**: Implemented `--package` flag (`python3 main.py --package`) to build `code.zip`.
+- **Git Commit**: `a6d428f`.
+
 
