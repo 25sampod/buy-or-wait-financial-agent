@@ -820,3 +820,11 @@ flowchart TD
 - **Files Tracked**: `.gitignore`, `code/main.py`, `code/README.md`, `code/requirements.txt`, `code/test_safe_amount.py`, `evaluation/usage_report.md`, `implementation_plan.md`, `output.csv`, `code.zip`.
 - **Files Excluded**: `log.txt` (per AGENTS.md §2 rule), `.env` (per secret protection rule), `venv/`.
 - **Working Tree**: Clean.
+
+## Live AI Verification
+- **Status**: Live connection confirmed with Azure OpenAI deployment `gpt-5-nano` (`HTTP 200 OK`).
+- **Capabilities Verified**:
+  - Chat completions with token telemetry.
+  - JSON object mode (`response_format={"type": "json_object"}`) verified.
+  - Multimodal document vision extraction verified on challenge pay slips.
+  - Automatic `.env` loading configured.

@@ -12,6 +12,20 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Auto-load .env configuration if present
+if os.path.exists('.env'):
+    try:
+        with open('.env') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    k, v = line.split('=', 1)
+                    k, v = k.strip(), v.strip().strip("'").strip('"')
+                    if k and v and k not in os.environ:
+                        os.environ[k] = v
+    except Exception as e:
+        logger.warning(f"Error loading .env: {e}")
+
 def parse_date(date_str: str) -> datetime.date:
     return datetime.datetime.strptime(date_str.strip(), "%Y-%m-%d").date()
 
@@ -234,8 +248,7 @@ class LLMClient:
                 kwargs = {
                     "model": self.deployment,
                     "messages": messages,
-                    "temperature": 0.0,
-                    "timeout": 15.0
+                    "timeout": 20.0
                 }
                 if json_mode:
                     kwargs["response_format"] = {"type": "json_object"}
