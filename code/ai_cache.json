@@ -1,0 +1,1972 @@
+{
+  "img_image_01": 4365000.0,
+  "img_image_02": 100000.0,
+  "img_image_03": 41772.0,
+  "img_image_04": 2854.0,
+  "img_image_05": 704.05,
+  "img_image_06": 1995.0,
+  "img_image_07": 8528.1,
+  "img_image_08": 15339.0,
+  "img_image_09": 723.0,
+  "img_image_10": 79679.26,
+  "img_image_11": 3650.0,
+  "img_image_12": 33.5,
+  "img_image_13": 2298.0,
+  "img_image_14": 4593.0,
+  "img_image_15": 9968.0,
+  "img_image_16": 393.22,
+  "msg_user_26": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_27": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_28": {
+    "salary_update": {
+      "new_amount": 1452.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_29": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_32": {
+    "salary_update": {
+      "new_amount": 54120.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_33": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_34": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_35": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_36": {
+    "salary_update": {
+      "new_amount": 2988.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_37": {
+    "salary_update": {
+      "new_amount": 21090000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_38": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_40": {
+    "salary_update": {
+      "new_amount": 1760.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_42": {
+    "salary_update": {
+      "new_amount": 148000.0,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_43": {
+    "salary_update": {
+      "new_amount": 32870000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_44": {
+    "salary_update": {
+      "new_amount": 115000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_45": {
+    "salary_update": {
+      "new_amount": 17290000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_47": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_48": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_49": {
+    "salary_update": {
+      "new_amount": 31464000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_50": {
+    "salary_update": {
+      "new_amount": 126000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_52": {
+    "salary_update": {
+      "new_amount": 69000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_53": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_54": {
+    "salary_update": {
+      "new_amount": 42460.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_57": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_58": {
+    "salary_update": {
+      "new_amount": 25840000.0,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_59": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_60": {
+    "salary_update": {
+      "new_amount": 530.4,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_61": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_62": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_64": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_65": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_66": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_68": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": 23,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_69": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "rent",
+        "percentage_increase": 12.0,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_70": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_71": {
+    "salary_update": {
+      "new_amount": 696.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_72": {
+    "salary_update": {
+      "new_amount": 18700.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_73": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "rent",
+        "percentage_increase": 12.0,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_74": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_75": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_76": {
+    "salary_update": {
+      "new_amount": 3072.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_77": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_80": {
+    "salary_update": {
+      "new_amount": 158000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_81": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "rent",
+        "percentage_increase": 12.0,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_82": {
+    "salary_update": {
+      "new_amount": 1752.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "arrears_adjustment",
+        "percentage_increase": null,
+        "new_amount": 788.4
+      }
+    ]
+  },
+  "msg_user_83": {
+    "salary_update": {
+      "new_amount": 62000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "childcare",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_84": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_85": {
+    "salary_update": {
+      "new_amount": 8618400.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_87": {
+    "salary_update": {
+      "new_amount": 251000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "childcare",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_88": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_90": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_91": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_92": {
+    "salary_update": {
+      "new_amount": 49280.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_93": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_94": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_95": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": 23,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_98": {
+    "salary_update": {
+      "new_amount": 1804.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_101": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_102": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_103": {
+    "salary_update": {
+      "new_amount": 164880.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_104": {
+    "salary_update": {
+      "new_amount": 35860.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_105": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_106": {
+    "salary_update": {
+      "new_amount": 1815.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_107": {
+    "salary_update": {
+      "new_amount": 2123.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_108": {
+    "salary_update": {
+      "new_amount": 33440.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_110": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "invoice",
+        "percentage_increase": null,
+        "new_amount": 16720.0
+      }
+    ]
+  },
+  "msg_user_111": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_112": {
+    "salary_update": {
+      "new_amount": 627.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_113": {
+    "salary_update": {
+      "new_amount": 1296.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_114": {
+    "salary_update": {
+      "new_amount": 148200.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_115": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_117": {
+    "salary_update": {
+      "new_amount": 1188.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_118": {
+    "salary_update": {
+      "new_amount": 759.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_119": {
+    "salary_update": {
+      "new_amount": 176000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "childcare",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_120": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_122": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_123": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_125": {
+    "salary_update": {
+      "new_amount": 748.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_126": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_127": {
+    "salary_update": {
+      "new_amount": 50160.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "childcare",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_128": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_129": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_130": {
+    "salary_update": {
+      "new_amount": 2177.28,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_131": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": 23,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_132": {
+    "salary_update": {
+      "new_amount": 1193.4,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_133": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_135": {
+    "salary_update": {
+      "new_amount": 828.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_137": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "rent",
+        "percentage_increase": 12.0,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_138": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_140": {
+    "salary_update": {
+      "new_amount": 31900.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_141": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_142": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_143": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_144": {
+    "salary_update": {
+      "new_amount": 864.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_145": {
+    "salary_update": {
+      "new_amount": 258000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_147": {
+    "salary_update": {
+      "new_amount": 1529.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "childcare",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_148": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_150": {
+    "salary_update": {
+      "new_amount": 893.75,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_151": {
+    "salary_update": {
+      "new_amount": 46170000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_152": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "work_expense_reimbursement",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_153": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_154": {
+    "salary_update": {
+      "new_amount": 1628.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_155": {
+    "salary_update": {
+      "new_amount": 84000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "childcare",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_156": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_157": {
+    "salary_update": {
+      "new_amount": 23940000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_159": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_160": {
+    "salary_update": {
+      "new_amount": 1672.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_161": {
+    "salary_update": {
+      "new_amount": 26790000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_162": {
+    "salary_update": {
+      "new_amount": 29070000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_163": {
+    "salary_update": {
+      "new_amount": 30400000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_164": {
+    "salary_update": {
+      "new_amount": 44270000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_165": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_166": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_167": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": 23,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_168": {
+    "salary_update": {
+      "new_amount": 137150.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_169": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_170": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_171": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_172": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_173": {
+    "salary_update": {
+      "new_amount": 1284.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_175": {
+    "salary_update": {
+      "new_amount": 1924.56,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_176": {
+    "salary_update": {
+      "new_amount": 847.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_177": {
+    "salary_update": {
+      "new_amount": 1731.6,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_178": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_179": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_180": {
+    "salary_update": {
+      "new_amount": 59000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_182": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_183": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_184": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_185": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "rent",
+        "percentage_increase": 12.0,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_186": {
+    "salary_update": {
+      "new_amount": 31889.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_187": {
+    "salary_update": {
+      "new_amount": 145000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_188": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "expense_reimbursement",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_189": {
+    "salary_update": {
+      "new_amount": 627.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_191": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_193": {
+    "salary_update": {
+      "new_amount": 1750.32,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_194": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": 23,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_195": {
+    "salary_update": {
+      "new_amount": 1222.65,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_197": {
+    "salary_update": {
+      "new_amount": 38190000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_198": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_199": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_200": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_201": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_202": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "credit_card_minimum_payments",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_204": {
+    "salary_update": {
+      "new_amount": 2024.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_208": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_210": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_212": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": 23,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_213": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_214": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_215": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_216": {
+    "salary_update": {
+      "new_amount": 2424.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_219": {
+    "salary_update": {
+      "new_amount": 1914.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "childcare",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_220": {
+    "salary_update": {
+      "new_amount": 1346.4,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_221": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_222": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_224": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "reimbursement",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_225": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "rent",
+        "percentage_increase": 12.0,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_226": {
+    "salary_update": {
+      "new_amount": 260000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_227": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_228": {
+    "salary_update": {
+      "new_amount": 30400000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_229": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_230": {
+    "salary_update": {
+      "new_amount": 2827.0,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_232": {
+    "salary_update": {
+      "new_amount": 2772.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_233": {
+    "salary_update": {
+      "new_amount": 16910000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_234": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_235": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_236": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_237": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_238": {
+    "salary_update": {
+      "new_amount": 912.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_240": {
+    "salary_update": {
+      "new_amount": 62000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_241": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_242": {
+    "salary_update": {
+      "new_amount": 968.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_245": {
+    "salary_update": {
+      "new_amount": 1680.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_246": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_247": {
+    "salary_update": {
+      "new_amount": 1528.56,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_248": {
+    "salary_update": {
+      "new_amount": 1548.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_249": {
+    "salary_update": {
+      "new_amount": 702.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_250": {
+    "salary_update": {
+      "new_amount": 53680.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_252": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_253": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_254": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_256": {
+    "salary_update": {
+      "new_amount": 214000.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_259": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": [
+      {
+        "category": "bill",
+        "percentage_increase": null,
+        "new_amount": null
+      }
+    ]
+  },
+  "msg_user_261": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_262": {
+    "salary_update": {
+      "new_amount": 48260000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_263": {
+    "salary_update": {
+      "new_amount": 1485.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_264": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_265": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": true
+    },
+    "expense_updates": []
+  },
+  "msg_user_266": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_267": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_268": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_269": {
+    "salary_update": {
+      "new_amount": 38280.0,
+      "new_day": 15,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_271": {
+    "salary_update": {
+      "new_amount": 103000.0,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_272": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_273": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_274": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "msg_user_275": {
+    "salary_update": {
+      "new_amount": null,
+      "new_day": null,
+      "is_ended": false
+    },
+    "expense_updates": []
+  },
+  "exp_request_29": "Full payment of 51,524.0 ZAR is recommended now because your balance is 113,540.1 ZAR, leaving 62,016.1 ZAR after payment\u2014well above the 28,300.0 ZAR minimum reserve\u2014by the 23 Nov 2025 deadline.",
+  "exp_request_34": "Full payment is affordable now: allocate 129,400 INR; post-payment balance would be 430,352.5 INR, staying above the 138,500 INR minimum reserve, with completion by 2025-01-28.",
+  "exp_request_28": "With 1789.40 EUR balance and 1100.00 EUR MinKeep, taking 1302.40 would drop to 487.00 EUR (below reserve). Only 318.38 EUR is currently safe; wait until the 2024-08-15 deadline.",
+  "exp_request_35": "Current balance: 231,530 INR; safe amount: 40,499 INR; minimum keep: 106,400 INR. The 212,000 request exceeds safe allotment; with a 2026-01-15 deadline, wait to fund later.",
+  "exp_request_27": "Full payment of 6,670 ZAR is affordable now: Safe amount 6,670 ZAR; balance 93,141.8 ZAR with a 20,500 ZAR reserve; deadline 2026-08-21; no spending changes.",
+  "exp_request_31": "Wait; safe amount IDR 5,948,819.36 can be allocated now while keeping minimum reserve IDR 16,588,900. You have until 2024-11-15 to complete the IDR 18,164,000 request, so it\u2019s affordable later.",
+  "exp_request_26": "Full payment of 15,656,000 IDR is affordable now: after payment, balance would be 85,189,250 IDR, still above the 24,768,300 IDR minimum reserve, with deadline 2025-10-07.",
+  "exp_request_30": "Plan uses safe withdrawal of 775.2 via three installments of 268.74 on 2026-04-06, 2026-05-06, and 2026-06-05, preserving a 900.0 minimum balance and meeting the 2026-06-06 deadline.",
+  "exp_request_32": "With a ZAR69,005.80 balance and MinKeep of ZAR35,700, funding 40,018 now would breach reserves; only ZAR18,074.55 is safe to draw. The 2025-04-15 deadline makes this affordable later.",
+  "exp_request_33": "Funding 118,000 now would reduce your balance to 49,280, below the 102,100 MinKeep; since the safe amount is 46,085.73, wait until the 2026-03-15 deadline to preserve the reserve.",
+  "exp_request_37": "Recommendation: wait; Safe amount 6,813,645 IDR is below the 14,649,000 request, you must keep at least 17,056,200 IDR, with a completion deadline of 2024-05-15.",
+  "exp_request_38": "Only 225.42 EUR is safely available now while preserving the 400 EUR minimum balance (779.40 EUR total). Since 971.30 EUR cannot be funded before 2025-10-15, the plan is to wait and fund later.",
+  "exp_request_41": "Wait for now: only 12,391,074 IDR is safely available, with a 25,366,600 IDR minimum reserve; the 38,760,000 IDR request would breach reserves before the 2026-01-15 deadline.",
+  "exp_request_39": "Wait: only 82,378.32 INR is safe to withdraw, preserving the 213,400 INR MinKeep. The 208,600 INR request would breach MinKeep, and the deadline is 2026-06-15.",
+  "exp_request_40": "Wait. Your safe withdrawal is 448.88 EUR; with a 2394.00 EUR balance and a 1500.00 EUR minimum reserve, withdrawing 1290.30 would breach the reserve, and completion is due by 2024-08-15.",
+  "exp_request_36": "Wait: with a 3,846.60 balance and 2,400.00 MinKeep, safe spend is 921.23; the 3,954.00 request cannot be funded by the 2026-09-15 deadline while preserving the reserve.",
+  "exp_request_44": "Wait; safe amount is 42,229.45 against a 82,900 MinKeep, and the 95,800 request can't be funded now without dipping below reserve; deadline is 2025-04-15 for available funds.",
+  "exp_request_42": "Full payment of \u20b952,100 is affordable now from your \u20b9261,765 balance; maintain a \u20b9113,100 minimum reserve and complete by 15 Mar 2026.",
+  "exp_request_43": "Recommendation: wait\u2014affordable later. Safe amount 8,347,931.93 IDR against a 21,398,000 IDR minimum reserve; deadline 2024-11-15 to fund 43,339,000 IDR.",
+  "exp_request_45": "Recommendation: wait; you have 19,982,900 IDR balance with 11,149,800 IDR minimum reserve, and only 5,228,742.80 IDR is safe to allocate. The 21,983,000 IDR request is due by 2026-09-15\u2014fund later.",
+  "exp_request_46": "Recommendation: installments; safe amount 49,450 allocated into two payments of 25,714 on 2024-12-03 and 2024-12-31, leaving balance above the 84,000 minimum reserve, with completion by 2025-01-09.",
+  "exp_request_47": "Full payment is affordable now: safe amount 38,114,000 can be paid from your 112,924,150 balance while maintaining a 30,049,000 minimum reserve; deadline 2025-06-19; no spending changes needed.",
+  "exp_request_48": "Full payment of 45,700 INR is affordable now; after payment you\u2019ll have 142,365 INR left, still above the 71,300 INR minimum reserve, and the deadline is 2026-08-24.",
+  "exp_request_50": "Given a balance of INR 247,325.50 with a reserve of INR 99,700, you can safely allocate INR 43,900 now to meet the 21 Aug deadline; full payment is affordable today with no spending changes.",
+  "exp_request_51": "Full payment of Safe Amount 2,191,000 IDR is affordable now; after payment you\u2019ll have 33,156,700 IDR, above MinKeep 7,811,000 IDR, with a completion deadline of 2026-02-28.",
+  "exp_request_54": "Not recommended: requested 121,528 ZAR is not affordable from current balance; safe amount is 6,458.84 ZAR, balance 53,581.4 ZAR with minimum reserve 37,000 ZAR; Deadline 2026-08-21, plan: none.",
+  "exp_request_52": "Wait; only 22,063.42 is safe to allocate now while preserving a 41,500 minimum reserve. Deadline to complete is 2024-07-09.",
+  "exp_request_53": "Recommended: installments totaling 1,767.18 (3x 589.06) on 2025-11-21, 2025-12-19, 2026-01-16; safe per-disbursement 619.01, min balance reserve 2100.0, deadline 2026-01-20.",
+  "exp_request_49": "Recommendation: proceed with installments of 11,902,106.67 IDR on 2024-03-18, 2024-04-18, and 2024-05-19; each installment stays under the safe amount of 14,911,394.19 IDR and completes by 2024-05-22, preserving 20,275,700.0 IDR MinKeep.",
+  "exp_request_58": "Full payment of 16,226,000 IDR is affordable now. After payment, your balance will be 25,920,065 IDR, comfortably above the 14,433,900 IDR minimum reserve, with a completion deadline of 2025-01-25.",
+  "exp_request_60": "With 683.69 on hand and a 400.00 min reserve, only 165.49 is safe to allocate now, so the 199.89 request isn\u2019t affordable; plan to reassess by the 2026-03-04 deadline.",
+  "exp_request_55": "Affordable_with_plan: Three installments of 75781.33 on 2026-06-11, 2026-07-12, and 2026-08-12 to complete by 2026-08-22; safe amount 147975.19 with MinKeep 124300.0.",
+  "exp_request_56": "Partial payment of 881.56 is funded as 775.84 on 2025-02-03 and 105.72 on 2025-02-15; the safe amount is 775.84, you keep a 2100 minimum balance, and the plan completes by 2025-03-13.",
+  "exp_request_59": "Installments totaling 140,600 (safe amount) split into 48,741.33 on 2025-05-07, 2025-06-04, and 2025-07-02; keeps balance above 132,600 min reserve and completes by 2025-07-02.",
+  "exp_request_64": "Not recommended: approving 63,700 would drop your balance to about 34,873, below the 36,100 minimum reserve. With a safe amount of 0.0, this is not affordable before the 16 Aug 2024 deadline.",
+  "exp_request_62": "Full payment of 404.23 is affordable now; it uses the safe amount, leaving balance above the 1300.00 min reserve; deadline 2025-10-09; current balance 5,151.44.",
+  "exp_request_61": "Installment plan approved: allocate the safe amount of 29,062.00 in three payments of 10,074.83 on 2024-03-17, 2024-04-17, and 2024-05-18, keeping the minimum reserve of 36,700 and completing by 2024-05-18 (within 2024-05-24 deadline).",
+  "exp_request_63": "Recommendation: partial_payment; safe amount 60,509.98 today, with 283,390.02 due by 2026-09-15 to meet the 2026-09-17 deadline; balance 251,795 and MinKeep 153,500.",
+  "exp_request_67": "Wait: from a $1,992.54 balance, preserving the $1,200 MinKeep, only $607.45 is safely allocable, so the $2,094 request cannot be funded by 2024-11-15.",
+  "exp_request_65": "Not affordable: Even with ZAR 28,524 balance and a safe withdrawal of ZAR 7,174.62, you cannot fund ZAR 54,340 by 2025-11-25 while preserving the ZAR 15,500 minimum balance.",
+  "exp_request_66": "Safe amount: INR 22,200; current balance INR 302,520 with minimum reserve INR 80,700; complete by 17-Apr-2026; full_payment is affordable now.",
+  "exp_request_57": "Paying 61,446.00 now would reduce balance to 2,468.60, below your 42,700.00 min reserve; only 14,724.02 is safely withdrawable. Deadline 2026-06-15; wait (affordable_later).",
+  "exp_request_71": "Not recommended: safe amount 1,802,043 IDR vs 21,451,000 IDR request; with 8,884,800 IDR min reserve and a 28 May deadline, this is not affordable.",
+  "exp_request_72": "Paying the safe amount of 11,330 ZAR now is affordable: current balance 30,337.13 ZAR, after payment 19,007.13 ZAR, above the 12,200 ZAR minimum reserve; deadline 2026-07-14.",
+  "exp_request_69": "Pay \u20ac529.10 now; post-payment balance \u20ac1,110.40 remains above the \u20ac700 minimum reserve. With a 14 Jan 2026 deadline, the safe amount is affordable immediately.",
+  "exp_request_70": "Current balance 208,360 INR; minimum reserve 115,000 INR; safe amount 59,952.21 INR; deadline 2025-02-15\u2014wait to fund the 243,900 INR request (affordable_later).",
+  "exp_request_74": "Full payment of 5,010.0 ZAR is affordable now from your 70,056.9 ZAR balance, keeping at least 21,900 ZAR as a reserve and meeting the 2025-10-21 deadline.",
+  "exp_request_68": "Installments totaling 2,175.27 are planned: 725.09 due 2025-02-14, 2025-03-14, and 2025-04-11; safe amount is 1,630.80 against a 1,500.00 MinKeep, to complete by 2025-04-16.",
+  "exp_request_73": "Safe amount INR 71,400 is affordable now; with a balance of INR 278,542.50 and a minimum reserve of INR 103,200, you can complete the full payment by 2023-02-13.",
+  "exp_request_78": "Full payment of 50,200 is affordable now; paying it leaves 106,476 (above the 55,200 minimum reserve) for a 2025-10-14 completion deadline.",
+  "exp_request_79": "Not recommended: With 2104.08 EUR balance and a 1000.00 EUR minimum reserve, only 471.10 EUR is safely allocable; the 2151.60 request cannot be met by the 2024-11-01 deadline.",
+  "exp_request_80": "Not recommended: requested 217,500 exceeds the safe amount of 119,845.03 and would leave 62,625, below the minimum reserve of 121,300; deadline 2025-02-21 makes it unaffordable.",
+  "exp_request_75": "Installments approved: 9,800.27 on 2026-04-09, 2026-05-09, and 2026-06-08 (total 29,400.81) to access the requested 28,270; deadline 2026-06-12 with a 39,000 minimum reserve on a 145,867.87 balance.",
+  "exp_request_77": "Full payment of 60,700 INR is affordable now from your 189,860.5 INR balance. It leaves 129,160.5 INR, well above the 82,200 INR minimum reserve, with a deadline of 2025-11-14.",
+  "exp_request_81": "Pay the full 2,076 now (safe amount); your balance would be 2,952.25, still above the 1,600 minimum reserve. The deadline is 2026-07-14, and this is affordable today.",
+  "exp_request_83": "Not recommended: with 68,930 balance and a 37,800 min reserve, only 31,130 is available; the 156,200 request exceeds liquidity and cannot be completed by 2025-06-17; safe deployable amount is 6,750.67.",
+  "exp_request_76": "Not recommended: the request of 4455.6 is not affordable by 2024-07-30; with balance 3338.8, minKeep 1800, and safe amount 969.02, max fundable by deadline is 2507.82.",
+  "exp_request_82": "Recommendation: wait. With a $2,202.40 balance and $1,100 MinKeep, approving $1,405.20 now would fall below your reserve; only $450.75 is safe today, deadline 2025-02-15, so defer until the buffer improves.",
+  "exp_request_86": "Full payment of 46,300 INR is affordable now. With a 228,639.5 INR balance and a 84,900 INR minimum reserve, complete by 2025-08-22.",
+  "exp_request_87": "Not recommended: requested 487,900 is not affordable given safe amount 24,994 and minimum balance reserve 185,900; deadline 2026-03-15.",
+  "exp_request_85": "Not affordable: with 8,818,420 IDR balance and 6,396,300 IDR MinKeep, only ~2,422,120 IDR is free; safe amount is 822,013.75 IDR, but the 19,304,000 IDR request is due by 2024-04-26.",
+  "exp_request_84": "Wait: balance INR 153,945 with minimum reserve INR 91,300; safe amount to allocate now is INR 38,180.34, and the 95,400 request due by 15 Jun 2026 should be funded later.",
+  "exp_request_92": "Full payment of 34,034.00 is affordable now; with a 78,664.47 balance and 28,100.00 minimum reserve, you meet the 2025-02-14 deadline.",
+  "exp_request_90": "Full payment of 2,560 ZAR is affordable now; after payment, balance would be 29,069.50 ZAR, still above the 7,600 ZAR minimum reserve, with a deadline of 2026-09-23.",
+  "exp_request_93": "Full payment of 1729.2 is affordable now; after payment, you\u2019ll have 2232.9 remaining (above MinKeep 1900.0), meeting the 2026-04-14 deadline.",
+  "exp_request_88": "Plan: three installments of 9,045.23 ZAR on 2024-06-14, 2024-07-15, 2024-08-15 (total 27,135.69) to finish by 2024-08-15, before deadline 2024-08-25, preserving 11,959.79 ZAR safe and a 25,800 ZAR minimum reserve.",
+  "exp_request_89": "Recommended: proceed with installments totaling 14,306,240.01 IDR split into 4,768,746.67 IDR on 2025-11-18, 2025-12-16, and 2026-01-13; safe amount 10,945,379.21 IDR, balance stays above MinKeep 12,534,700 IDR, completing by 2026-01-13 (deadline 2026-01-15).",
+  "exp_request_95": "Not affordable: with INR 283,365 balance and INR 145,500 min reserve, only INR 137,865 remains, and INR 59,683 is the safe withdrawal; the INR 553,000 target cannot be completed by 14-Jul-2025.",
+  "exp_request_94": "Pay 572 EUR now (safe amount); after payment, your balance will be 2091.60 EUR, still above the 600 EUR minimum reserve, with a completion deadline of 2024-12-22.",
+  "exp_request_91": "Wait to withdraw 1927.2 EUR. Only 664.71 EUR is safe to draw now, preserving the 2100.0 EUR minimum; deadline 2024-11-15.",
+  "exp_request_99": "Full payment of 18,062 ZAR is affordable now; after payment the balance will be 68,644.58 ZAR, above your 49,100 ZAR minimum reserve, with a completion deadline of 2026-07-14.",
+  "exp_request_98": "Wait: withdrawing 27,148 would leave 20,096.70, below your 30,000 MinKeep; Safe amount 9,561.29; deadline 2025-10-15.",
+  "exp_request_102": "Installments totaling 1,716 EUR are affordable while preserving a 900 EUR minimum reserve. Complete by 2026-06-12 with 594.88 EUR payments on 2026-04-05, 2026-05-05, and 2026-06-04.",
+  "exp_request_104": "Full payment of 17,204 ZAR is affordable now (safe amount 17,204) with a remaining balance of 64,021.7 ZAR and minimum reserve 24,700.0 ZAR; deadline 2025-04-15.",
+  "exp_request_101": "Full payment of 143,500 INR is recommended now, using the safe amount while preserving the 187,400 INR minimum reserve; deadline 14 November 2025, and your current balance of 465,868.5 INR supports this.",
+  "exp_request_96": "Approve three installments of INR 31,269.33 on 2026-01-10, 2026-02-09, and 2026-03-11 (total INR 93,807.99); end balance stays above INR 56,500 with safe INR 84,764.35, deadline 2026-03-12.",
+  "exp_request_106": "Delay the 2,207.70 EUR request; safe-to-spend now is 439.28 EUR, maintain a 1,200.00 EUR minimum reserve, with completion by 2025-02-15.",
+  "exp_request_100": "Recommendation: proceed with the three-installment plan (12,866.19 on 2024-06-13, 2024-07-14, 2024-08-14) as it fits within your safe amount of 29,616.17 and completes by 2024-08-14, ahead of the 2024-08-16 deadline.",
+  "exp_request_103": "Not recommended: With INR 168,749 balance and INR 125,500 minimum reserve, only INR 21,711.66 is safe to allocate. The INR 368,300 request is due by 07-Oct-2024 and is not affordable.",
+  "exp_request_97": "Recommendation: installments of 8,145.28 each on 2024-03-19, 2024-04-19, and 2024-05-20. Safe amount: 2,929.44; minimum balance reserve: 29,700; completion deadline: 2024-05-24.",
+  "exp_request_107": "Proceed with installments of 878.59 on 2025-05-08, 2025-06-05, and 2025-07-03; the safe amount is 2534.40, keeping your balance above the 1600.00 MinKeep, with completion by 2025-07-04.",
+  "exp_request_111": "Full payment of 16,625,000 IDR is affordable now. After paying, your balance would be 68,579,860 IDR (still above the 23,022,800 IDR minimum), with a deadline of 2026-05-02.",
+  "exp_request_105": "Safe amount 53,500.0; paying now is affordable with a balance of 147,831.8 and post-payment reserve 94,331.8 above MinKeep 73,900, deadline 2026-06-14, spending cut to 1,632.00.",
+  "exp_request_108": "With a ZAR 31,936.40 balance and a ZAR 24,100 min reserve, only ZAR 4,947.66 is safely deployable now. The ZAR 55,308 request cannot be funded by the 2026-07-26 deadline; wait and revisit.",
+  "exp_request_109": "Installments recommended: three payments of 645.98 EUR on 2024-03-18, 2024-04-18, and 2024-05-19; safe amount 731.15 EUR, minimum balance reserve 1700 EUR, completion deadline 2024-05-26.",
+  "exp_request_113": "With a safe amount of 27,641.78 INR and a minimum reserve of 82,300 INR, defer the 36,500 INR request until 2026-10-19; affordability exists only later.",
+  "exp_request_112": "Full payment of 271.7 EUR is affordable now; after payment 754.3 EUR remains, above the 500.0 EUR MinKeep, with a deadline of 14 June 2024.",
+  "exp_request_116": "Not recommended. The 241,200 request is not affordable: safe amount 16,501.45 cannot cover it, given balance 138,375 and minimum reserve 80,300, with deadline 2025-04-16.",
+  "exp_request_114": "Pay INR 65,300 now (Safe Amount) from INR 219,230; post-payment balance INR 153,930, above MinKeep 113,400; deadline 2026-01-14; affordable_now, no changes.",
+  "exp_request_117": "Full payment of 880.0 EUR is affordable now; after payment your balance would be 1284.2 EUR, which stays above the 1000.0 EUR minimum reserve, with 2026-07-14 as the deadline.",
+  "exp_request_110": "Safe amount: 22352.0 ZAR; MinKeep: 11200.0 ZAR. Installments set for 2025-08-06, 2025-09-03, and 2025-10-01 complete by 2025-10-01, before the 2025-10-11 deadline.",
+  "exp_request_115": "Wait: only INR 16,371.71 is safely available from your INR 65,935 balance while preserving the INR 38,800 minimum. With a 2024-11-15 deadline for INR 80,500, fundability is affordable later.",
+  "exp_request_123": "Recommendation: full_payment of 4,076,000 IDR now. Your balance (63,706,400 IDR) minus the payment leaves 59,630,400 IDR, still above the 18,091,200 IDR minimum reserve, with a deadline of 28 Mar 2026.",
+  "exp_request_124": "Recommendation: installments; safe amount 1,403.78 EUR; min balance reserve 1,600.00 EUR; completion by 2024-08-20 with three payments of 1,076.12 EUR on 2024-06-11, 2024-07-12, and 2024-08-12.",
+  "exp_request_120": "Pay IDR 7,714,000 in full by 14 Apr from your balance (IDR 31,748,980). This leaves IDR 20,050,300 as minimum reserve, meeting the 14 Apr deadline.",
+  "exp_request_122": "Installments approved: safely allocate 20,558,000 IDR across three payments of 7,126,773.33 IDR on 2025-08-05, 2025-09-02, and 2025-09-30, preserving a 12,588,500 IDR reserve and finishing by 2025-10-02.",
+  "exp_request_125": "Pay 6,468 ZAR in full by 14 Nov 2025; current balance is 22,027.97 with min keep 11,300, so the remaining balance after payment is 15,559.97, safely above the minimum reserve.",
+  "exp_request_118": "Installments totaling 767.61 EUR (three payments of 255.87 EUR on 2024-12-07, 2025-01-07, 2025-02-07) are affordable within plan; safe amount 717.33 EUR, MinKeep 600 EUR, deadline 2025-02-08.",
+  "exp_request_121": "Pay 633.6 in full (safe amount) by 2024-03-14. With a 1,741 balance and 800 minimum reserve, this leaves 1,107.40 after payment\u2014well above the reserve and affordable now.",
+  "exp_request_126": "Full payment of INR 159,600 is affordable now; post-payment balance INR 243,575, above the INR 129,700 minimum reserve, deadline 2026-07-17; no spending changes required.",
+  "exp_request_119": "Recommendation: installments of 70,546.67 on 2025-05-18, 2025-06-15, and 2025-07-13 (total 211,640.01) to complete by 2025-07-17; safe withdrawal 61,267.60 against a 151,200 MinKeep.",
+  "exp_request_128": "Paying the full 25168 now is affordable; it leaves 55543.7 after payment, still above the 42600.0 MinKeep, ahead of the 2025-02-14 deadline (Safe Amount: 25168.0).",
+  "exp_request_127": "Wait; only 13,959 ZAR is safe to withdraw now while preserving the 41,000 ZAR minimum balance, with the 23,980 ZAR request to be completed by the 2024-10-18 deadline.",
+  "exp_request_130": "Wait: with a $2,317.46 balance and $1,400 MinKeep, only $659.64 is safe to allocate; the $1,978.80 request would exceed safe funds before the 2025-02-15 deadline.",
+  "exp_request_132": "Full payment of 379.86 is affordable now; post-payment balance 1,364.69 remains above your 1,100 minimum reserve, with the 2026-02-25 deadline.",
+  "exp_request_133": "Balance IDR 36,824,650; minimum reserve IDR 9,986,200; request IDR 15,770,000 due 2024-03-29 is not affordable (safe amount 0.0) and cannot be safely completed.",
+  "exp_request_131": "Installments are recommended: three payments of 643.14 on 2025-05-06, 2025-06-03, and 2025-07-01. This plan preserves a safe balance of 1,440.23 and maintains a 1,100 minimum, finishing before 2025-07-08.",
+  "exp_request_129": "Not recommended: with a 1,088.00 balance and an 800.00 minimum reserve, the safe withdrawal is 111.21, and a 2,668.80 request due by 2026-06-18 is not affordable.",
+  "exp_request_137": "Wait: only 36,357.58 INR is safe to withdraw today; your minimum reserve is 71,800 INR, and the 80,100 INR request exceeds safe funds before the 2026-01-15 deadline, so fund later rather than now.",
+  "exp_request_134": "Wait: safe amount is 6,892,608 IDR; the 21,831,000 IDR requested would dip your balance below the 15,902,500 IDR minimum reserve, with a deadline of 2025-10-15.",
+  "exp_request_138": "Recommendation: partial_payment feasible: use safe 855.21 on 2026-04-07 and 401.73 on 2026-04-15, preserving a 2300.00 MinKeep; deadline 2026-06-05 is met with a 3644.65 balance.",
+  "exp_request_135": "Full payment now: safe amount 304.8; post-payment balance 736.3 (MinKeep 500), deadline 2026-07-14.",
+  "exp_request_136": "Pay 560.40 USD now (full payment) since current balance is 2,291.68 USD; after payment, 1,731.28 USD remains above the 1,100 USD minimum reserve. Deadline 2024-06-14; no spending changes required.",
+  "exp_request_142": "Full payment of 1263.6 is recommended now; it's affordable given a 5993.85 balance, leaving 4730.25 after payment and well above the 1700 min reserve, with a 2025-02-04 deadline.",
+  "exp_request_140": "Not affordable: 62,832 request exceeds liquidity; balance 34,679 with minKeep 21,600 leaves 13,079, safe amount 3,316.99, deadline 2025-03-04.",
+  "exp_request_141": "Not affordable: with \u20b9122,545 on hand and \u20b967,300 minimum reserve, only \u20b930,236.11 is safe to allocate; by 12 Feb, \u20b9171,600 cannot be funded without breaching reserve, so plan is not recommended.",
+  "exp_request_139": "Installments are recommended: three payments of $802.88 on 2024-09-07, 2024-10-08, and 2024-11-08; this keeps a $1,500 reserve with a safe amount of $1,522.37 and completes by 2024-11-17.",
+  "exp_request_143": "Wait\u2014only 4,517.20 ZAR is safe to spend from a 20,111 ZAR balance while keeping 11,300 ZAR; the 12,584 ZAR request would breach reserves, with a completion deadline of 2025-07-15.",
+  "exp_request_145": "Installment plan is approved: three payments of 75,365.33 on 2024-03-20, 2024-04-20, and 2024-05-21; safe amount 41,269.07 supports this, while keeping 155,400 minimum balance; deadline 2024-05-26.",
+  "exp_request_146": "Not recommended; safe amount 28,112.97 vs 449,400 requested by 2025-10-17, with minimum balance reserve 108,600; current balance 190,065 renders it unaffordable today.",
+  "exp_request_144": "Pay the full 233.34 now; your balance will drop to 1014.74, still above the 600.00 minimum. Deadline 2026-07-26; this is affordable today, with no spending changes needed.",
+  "exp_request_148": "Installments approved: 22242 split into 7710.56 on 2024-06-14, 2024-07-15, 2024-08-15; safe amount 10456.18; minimum balance 20000; deadline 2024-08-18.",
+  "exp_request_147": "Installment plan for EUR 1129.70 split into EUR 391.63 on 2026-04-08, 2026-05-08, and 2026-06-07; safe amount EUR 550.44, min balance EUR 900.00, deadline 2026-06-07.",
+  "exp_request_149": "Installment plan: three payments of 12,706.03 on 2025-11-18, 2025-12-16, and 2026-01-13 (total 38,118.09); this uses funds above the safe 26,010.10 while preserving the 42,100 minimum reserve and meeting the 2026-01-19 deadline.",
+  "exp_request_151": "Full payment of 26,999,000 IDR is affordable now; your safe amount equals 26,999,000 IDR with a minimum balance reserve of 31,633,600 IDR, deadline 2024-09-14. After payment, about 56,999,265 IDR remains, safely above the reserve.",
+  "exp_request_150": "Installments totaling 515.94 (171.98 on 2026-01-06, 2026-02-05, 2026-03-07) are affordable; safe amount 406.54, maintain 700 minimum balance, completion by 2026-03-16.",
+  "exp_request_153": "Not affordable: funding 2830.80 by 2026-09-24 would breach the 1400 MinKeep (current 1903.60; 503.60 free; safe amount 203.72).",
+  "exp_request_156": "With 42,105.30 ZAR balance and a 26,900.00 ZAR minimum reserve, only 8,788.17 ZAR is safely available today; the 43,076.00 ZAR request should wait until the 2026-06-15 deadline (affordable_later).",
+  "exp_request_154": "Installments totaling 1625.8 are affordable with a 1300.0 reserve; the plan completes by 2025-02-14, with 563.61 payments on 2024-12-04, 2025-01-04, and 2025-02-04.",
+  "exp_request_155": "Full payment of 112,500 is affordable now; after payment your balance would be 105,550, still above MinKeep 56,300, with a completion deadline of 20 May 2025.",
+  "exp_request_152": "Installments recommended: 3 payments of 4,812.43 on 2025-02-12, 2025-03-12, 2025-04-09; safe amount 12,363.42, min reserve 11,900, plan completes before 2025-04-13 deadline.",
+  "exp_request_159": "Full payment of 13,398 ZAR is affordable now from your 40,283.20 ZAR balance, leaving 26,885.20 ZAR after payout and still meeting the 8,700 ZAR minimum reserve; deadline for completion: 2026-03-20.",
+  "exp_request_158": "Installments totaling 242,600 (safe amount), split 84,101.33 on 2025-08-07, 2025-09-04, 2025-10-02; preserves minimum balance 131,400, with completion by 2025-10-02.",
+  "exp_request_162": "Not recommended: requested 83,923,000 IDR exceeds your safe amount of 3,661,742.72 IDR and would drop balance below the minimum reserve of 24,161,100 IDR by the deadline 2026-08-26.",
+  "exp_request_157": "With IDR 25,805,950 balance and MinKeep IDR 15,714,100, only about IDR 5,151,346 is safe now; the IDR 23,503,000 request would exceed safe funds by the deadline 2024-05-15, so wait (affordable_later).",
+  "exp_request_160": "Installment plan approved: 3 payments of 432.05 EUR (total 1,296.15 EUR) on 2024-06-13, 2024-07-14, 2024-08-14; safe amount 643.61 EUR, maintains 1,200 EUR min reserve, completion by 2024-08-20.",
+  "exp_request_165": "Full payment of \u20b980,600 is affordable now; after payment your balance would be \u20b9286,105, still above the \u20b995,000 minimum reserve, with a completion deadline of 21-Apr-2026.",
+  "exp_request_164": "Safe amount is 27,018,000 IDR; with a 29,550,500 IDR minimum reserve, the 27,018,000 IDR request is feasible via 3 installments of 9,366,240 IDR on 2025-02-11, 2025-03-11, 2025-04-08, completing by 2025-04-15.",
+  "exp_request_161": "Wait; only 9,538,271.95 IDR is safely available now against a 23,010,400 IDR minimum reserve, so the 21,204,000 IDR request should be postponed until the 2026-01-15 deadline.",
+  "exp_request_168": "Partial payment plan approved: \u20b936,920.04 on 2026-01-07 and \u20b912,459.96 on 2026-01-15 to fulfill \u20b949,380 request, while keeping \u20b9114,400 min reserve and completing by 2026-03-16.",
+  "exp_request_167": "Payment of 43,802 ZAR is affordable now (safe amount equals requested). With 105,090.3 ZAR balance and 31,200 ZAR minimum reserve, paying now leaves 61,288.3 ZAR and meets the 2025-05-31 deadline.",
+  "exp_request_171": "Not recommended: with 810.65 EUR balance, 500 EUR minimum reserve, and only 114.07 EUR safe to spend, the 1,878.80 EUR request cannot be funded by the 2026-09-10 deadline (not affordable).",
+  "exp_request_169": "Full payment of 41,976 ZAR is affordable now; after reserving the 18,700 ZAR minimum, you\u2019d have 35,568.50 ZAR left, with a 16 May 2024 deadline.",
+  "exp_request_166": "Safe amount is 2,907.60; with a 9,001.95 balance and a 1,700 minimum reserve, the three-installment plan (12/03/2024, 01/03/2025, 02/03/2025) completes by 2025-02-05.",
+  "exp_request_163": "Installments of 6,692,053.33 on 2024-09-10, 2024-10-11, and 2024-11-11 are affordable with plan; safe amount 13,194,545.81, minimum balance 26,728,700, completion by 2024-11-11, deadline 2024-11-15.",
+  "exp_request_170": "Recommendation: installments; total 36936000 in three payments of 12804480 on 2025-08-06, 2025-09-03, 2025-10-01; safe amount 34633492.64, minimum reserve 24715800.0, deadline 2025-10-04.",
+  "exp_request_175": "Full payment of 2346.30 EUR is affordable now from your 4760.25 EUR, leaving 2413.95 EUR above the 1700.00 EUR minimum reserve, with a deadline of 2024-10-01.",
+  "exp_request_173": "Installment plan approved: three payments of 39,173.33 on 2025-11-21, 2025-12-19, and 2026-01-16; affordable_with_plan, Safe Amount 69,931.37, MinKeep 79,100, completing by 2026-01-17.",
+  "exp_request_176": "Wait: with 1,286.95 EUR balance and a 600.00 EUR reserve, only 417.05 EUR is safely available; the 1,239.70 EUR request has a 2025-02-27 deadline and should be funded later.",
+  "exp_request_180": "Full payment of 66,500 is affordable now; after payment, your balance would be 68,480, above the 37,300 minimum reserve, with completion deadline 2026-09-02.",
+  "exp_request_177": "Paying the safe amount of 1,017.60 now is affordable; after payment you\u2019ll have 1,969.64, still above the 1,300 reserve by the 2026-01-25 deadline.",
+  "exp_request_174": "Installments totaling EUR 1,146.20 are scheduled: EUR 397.35 on 2026-04-04, 2026-05-04, and 2026-06-03. This leaves about EUR 2,074 after payments, well above the EUR 700 reserve, with completion by 2026-06-07.",
+  "exp_request_181": "Not affordable: with balance 3362.0 and a 2000.0 minimum reserve, the safe withdrawal is 574.84, so a 5059.20 request cannot be funded. Deadline 2024-04-07 implies insufficient funds by that date.",
+  "exp_request_178": "Plan is affordable with 2,938.1 EUR safe; funded in three installments of 1,018.54 EUR on 2024-12-07, 2025-01-07, and 2025-02-07, completing by 2025-02-12 while preserving 1,400 EUR MinKeep.",
+  "exp_request_172": "Plan recommends installments of 5,304 ZAR on 2024-06-05 and 2024-07-03 (Safe Amount 10,200 ZAR), with completion by 2024-07-15 and maintaining a 27,200 ZAR minimum balance from current 50,942 ZAR.",
+  "exp_request_184": "Not recommended: With INR 163,160 balance and INR 110,800 minimum reserve, only INR 22,751.89 is safely drawable; the INR 251,900 request cannot be funded by 2024-07-30.",
+  "exp_request_179": "Saldo 79,388,050 IDR, min_keep 41,430,800 IDR; safe amount 12,939,654.31 IDR. Permintaan 41,648,000 IDR exceeds safe amount; deadline 2025-07-15; rekomendasi: tunggu (affordable_later).",
+  "exp_request_182": "Full payment of 65714.0 is recommended now; it leaves 59296.3 after payment, safely above the 31100.0 minimum reserve, with deadline 2025-09-26.",
+  "exp_request_185": "Wait; only 493.03 EUR is safely usable now while preserving the 1300.00 EUR minimum reserve; re-evaluate by 2026-01-15.",
+  "exp_request_183": "Installments approved: three equal payments of 9,313,546.67 IDR on 2026-04-10, 2026-05-10, and 2026-06-09; safe amount 25,629,061.12 IDR, minimum balance 11,878,300.00 IDR, deadline 2026-06-18.",
+  "exp_request_188": "Not recommended: requested 2,464 EUR is not affordable. With 1,485.30 EUR balance and 900.00 EUR MinKeep, only ~238.30 EUR is safely available, and the 2025-03-04 deadline cannot be met.",
+  "exp_request_186": "Wait: only 8,694.25 is safe to move now given a 22,000 minimum reserve; the full 26,554 would breach the reserve before the 2026-03-15 deadline.",
+  "exp_request_191": "Pay 664.40 EUR now (Safe Amount: 664.40). Remaining balance 926.66 EUR stays above the 500 EUR MinKeep; deadline 2025-07-17 ensures completion.",
+  "exp_request_189": "Full payment of 488.4 EUR is affordable now; after payment, balance would be 659.26 EUR (min keep 400.0 EUR), with deadline 2026-08-14.",
+  "exp_request_194": "Safe amount to allocate is 47,772.37 INR while preserving a 113,600 INR MinKeep; with a 2025-10-23 deadline, the 132,800 request should wait (affordable_later).",
+  "exp_request_187": "Wait: funding INR 187,500 now would breach the INR 128,300 minimum; current balance INR 195,735 allows only INR 45,576.87 safely. Deadline: 2024-11-15.",
+  "exp_request_190": "Only 810.95 EUR is safely allocable now from a 3155.8 EUR balance, preserving a 1600 EUR minimum reserve; since the 2557.5 EUR request has a 2025-02-15 deadline, postpone to avoid dipping below reserve.",
+  "exp_request_192": "Not affordable: current balance $1,384.80 with a $1,000 MinKeep; safe amount is $175.42, and the $2,046 request cannot be met by the 2026-05-11 deadline.",
+  "exp_request_193": "Installments are affordable: three payments of 420.23 on 2024-03-21, 2024-04-21, and 2024-05-22 (total 1,260.69), preserving the 1,000 EUR minimum balance and 210.84 EUR safe amount; deadline 2024-05-28.",
+  "exp_request_199": "Installment plan: three payments of 8,206,986.67 IDR on 2024-09-07, 2024-10-08, and 2024-11-08 totaling 23,674,000, keeping 25,359,500 minimum; completes by 2024-11-08, ahead of the 2024-11-10 deadline.",
+  "exp_request_201": "Full payment of IDR 23,997,000 is affordable now. Use the safe amount (IDR 23,997,000) while maintaining the minimum balance reserve of IDR 17,304,500, with deadline 2026-05-16.",
+  "exp_request_198": "Full payment of 185,800 INR is affordable now using your Safe Amount. Post-payment balance would be 209,390 INR, above the 124,300 INR MinKeep, with a completion deadline of 2026-09-21.",
+  "exp_request_196": "Proceed with full payment of 762.30 EUR now; after payment you\u2019ll have 813.35 EUR, above your 500.00 EUR minimum reserve. Deadline to complete: 2024-07-05.",
+  "exp_request_197": "Safe amount 50,939,000 IDR will be released in three installments of 17,658,853.33 IDR on 2025-11-19, 2025-12-17, and 2026-01-14. Maintain minimum balance reserve 26,245,900 IDR; completes by 2026-01-14 (before 2026-01-21).",
+  "exp_request_202": "Safe amount INR 123,900 can be paid in full now; current balance INR 366,065 leaves INR 242,165 after payment, still above MinKeep INR 147,800, with deadline 14 Jan 2025.",
+  "exp_request_200": "You can pay the full 21,717,000 IDR now; after payment, your balance would be 32,169,150 IDR, still above the 20,114,600 IDR minimum reserve, ahead of the 2025-04-10 deadline.",
+  "exp_request_208": "Full payment of 4,413,000 is affordable now; after payment you\u2019ll have 12,515,800, still above the 10,470,700 minimum reserve, with a deadline of 2024-07-13.",
+  "exp_request_205": "Full payment of 10,621,000 IDR is affordable now, as this is within your safe amount; with a current balance of 31,462,900 IDR and minimum reserve of 13,994,300 IDR, complete by 2024-05-19.",
+  "exp_request_204": "Full payment of 588.74 EUR can be made now from your 2,626.28 EUR balance. After payment, you\u2019ll have 2,037.54 EUR (well above the 1,300 EUR MinKeep) with the deadline 2026-01-31.",
+  "exp_request_207": "Wait on the 11,830 ZAR request; only 6,737.41 ZAR is safe to withdraw while maintaining the 13,600 ZAR minimum balance. The completion deadline is 2026-07-24.",
+  "exp_request_206": "Safe amount EUR 1,404.70, split into three installments (EUR 486.96 on 2025-08-03, 2025-08-31, 2025-09-28). With balance EUR 5,231.14 and MinKeep EUR 900.00, the 2025-09-29 deadline is achievable.",
+  "exp_request_211": "Only 591.04 is safe to allocate from your 2727.89 balance (min keep 1500.0); with a 2024-11-15 deadline, the 1788.6 request should be deferred (affordable_later).",
+  "exp_request_210": "Partial payment approved: 954.88 on 2026-04-06 and 405.14 on 2026-04-15, totaling 1,360.02; safe amount is 954.88 while preserving a 2,000 minimum balance, deadline 2026-06-23.",
+  "exp_request_213": "Installment plan approved: Safe amount 3362.4 via three payments of 1165.63 on 2026-01-21, 2026-02-20, and 2026-03-22; preserves MinKeep 2100.0 and meets the 2026-03-22 deadline.",
+  "exp_request_212": "Not affordable: current balance 51,923,800 IDR cannot cover 71,934,000 IDR by 2025-02-28; safe discretionary amount is 7,759,679.95 IDR while minimum reserve is 29,579,800 IDR.",
+  "exp_request_203": "Approved plan: three installments of 499.93 EUR on 2025-05-10, 2025-06-07, and 2025-07-05; safe amount 1,442.1 EUR is respected, min reserve 1,400 EUR maintained, deadline 2025-07-08.",
+  "exp_request_209": "Not recommended: with 27,025.10 ZAR balance, safe withdrawal 3,000.56 would leave 24,024.54, still far from 56,914 due by 2025-11-25, while preserving 18,400 minimum; plan remains none.",
+  "exp_request_214": "Safe amount: 69,750 INR via installments of 36,270 on 2024-12-04 and 36,270 on 2025-01-01; current balance 292,180 keeps 174,900 minimum reserve and meets the 28-Jan-2025 deadline.",
+  "exp_request_215": "Affirmed: safe amount 29,986.0 can be paid in 3 installments of 10,395.15 on 2025-05-09, 2025-06-06, and 2025-07-04, leaving MinKeep 15,700 and finishing by 2025-07-10 from a 93,951.16 balance.",
+  "exp_request_219": "Installment plan of 580.01 EUR on 2026-04-07, 2026-05-07, and 2026-06-06 is approved; it stays within your safe 696.87 EUR and maintains the 1,100 EUR min reserve, finishing before the 2026-06-13 deadline.",
+  "exp_request_216": "Not affordable now: 2966.8 balance with 1800 MinKeep leaves only 710.77 safe; the 3332.4 request cannot be completed by 2026-09-15\u2014wait and reassess.",
+  "exp_request_220": "Not recommended: cannot fund 3,118.50 EUR by 2024-07-03; only 147.31 EUR is safe to allocate from a 1,487.32 EUR balance, with a minimum reserve of 1,100.00 EUR.",
+  "exp_request_221": "Pay 109,800.0 INR now (safe amount).  Post-payment balance 158,505.0 INR remains above your 81,500.0 INR MinKeep, with a completion deadline of 2026-01-14.",
+  "exp_request_218": "Installment plan approved: 61,142,000 IDR across three payments of 21,195,893.33 IDR on 2025-08-07, 2025-09-04, and 2025-10-02. Safe amount 25,744,192.48 IDR; minimum balance reserve 34,477,200 IDR; completion deadline 2025-10-06.",
+  "exp_request_222": "Full payment of 34,078.0 ZAR is affordable now. After payment, the balance is 84023.7 ZAR, above the 27,300.0 ZAR minimum reserve, and the payment can be completed by 2026-03-10.",
+  "exp_request_226": "Pay the full 157,000 now; post-payment balance 424,180 remains above the 209,400 minimum reserve, meeting the 2025-01-15 deadline.",
+  "exp_request_227": "Not recommended: With a balance of 105,655 INR and a minimum reserve of 62,900 INR, the safe allocation is 12,812.01 INR, far short of the 259,700 INR requested by 2025-06-20.",
+  "exp_request_224": "Approved as affordable with a two-installment plan totaling 10,740,080 IDR (5,370,040 IDR due on 2025-02-04 and 2025-03-04). Safe amount is 10,327,000 IDR; maintain a minimum reserve of 22,187,600 IDR and complete by 2025-03-16.",
+  "exp_request_223": "Pay 898.7 EUR in full now; this leaves a post-payment balance of 1,356.81 EUR, above the 800.0 EUR MinKeep. Deadline is 2024-10-20, so the full payment is affordable now.",
+  "exp_request_217": "Installment plan approved: 12889.07 on 2024-03-19, 2024-04-19, 2024-05-20 (total 38667.21); safe amount 21549.61 with a 26800 minimum reserve, deadline 2024-05-21.",
+  "exp_request_195": "Installments of 405.74 EUR on 2026-01-09, 2026-02-08, and 2026-03-10; total 1,217.22 EUR, affordable-with-plan, with a safe amount of 1,100.45 EUR and 700 EUR minimum balance, completing by 2026-03-10 (deadline 2026-03-11).",
+  "exp_request_228": "Not affordable: safe amount is 4656900 IDR vs 63327000 IDR requested; with a minimum reserve of 26191200 IDR and a 2026-04-30 deadline, it's not feasible.",
+  "exp_request_230": "Full payment of 3537.6 EUR is affordable now. After payment, your balance would be 5139.16 EUR, well above the 2000 EUR minimum reserve, with deadline 2025-10-04.",
+  "exp_request_231": "Proceed with three installments of 12,378.08 (01-06, 02-05, 03-07) for a safe amount of 35,706, keeping the minimum reserve at 24,300 and completing by 2026-03-17.",
+  "exp_request_234": "With a 1,274.25 EUR balance and 700 EUR MinKeep, only 208.58 EUR is safely fundable now; paying 1,213.30 would leave ~61 EUR before the 2026-09-15 deadline, so wait (affordable_later).",
+  "exp_request_235": "Full payment of 967.20 is affordable now; with a 700.00 MinKeep and a 2024-10-25 deadline, you can complete the payment without dipping below your reserve.",
+  "exp_request_233": "Partial payment recommended: pay 5,468,200 IDR on 2025-11-07 and 772,800 IDR on 2025-11-15 to total 6,241,000 IDR, safely within your 19,341,300 IDR balance and 10,365,700 IDR MinKeep; deadline 2025-12-17.",
+  "exp_request_232": "With a 4269.40 EUR balance and 2400.00 EUR MinKeep, only 824.15 EUR is safe to release; thus the 1970.10 EUR request should be waited on until after the 2024-08-15 deadline.",
+  "exp_request_225": "Recommendation: installments. Three payments of 7,647,120 IDR on 2026-07-20, 2026-08-19, 2026-09-18; Safe Amount 11,181,984 IDR; MinKeep 17,670,700 IDR; Deadline 2026-09-21.",
+  "exp_request_236": "Not affordable: only 6,714,693.05 IDR is safely allocatable vs 52,383,000.0 IDR requested; with MinKeep 16,768,600.0 IDR and balance 31,173,450.0 IDR, the 2025-02-23 deadline cannot be met.",
+  "exp_request_240": "Partial-payment plan is affordable with plan: allocate 19,495 INR on 2026-01-06 (safe amount) and 81,705 INR by 2026-03-15 to reach 101,200 INR before 2026-03-20; maintain a minimum reserve of 52,800 INR.",
+  "exp_request_239": "Proceed with full payment of $642 now; your $1,988.90 balance minus $642 leaves $1,346.90, well above the $600 MinKeep, with a deadline of 2025-05-24.",
+  "exp_request_241": "Proceed with installments totaling 21,052,000 IDR; plan: 7,298,026.67 on 2024-03-17, 2024-04-17, and 2024-05-18; this keeps balance above the 19,252,000 IDR minimum, deadline 2024-05-25.",
+  "exp_request_242": "With current balance 1,037.40 EUR and a 600.00 EUR minimum reserve, the 1,966.80 EUR request due by 25 Aug 2025 is not affordable; only 140.82 EUR is considered safe to allocate.",
+  "exp_request_244": "Proceed with full payment of 49,918 ZAR now; your safe amount matches the request and is affordable today from a 126,279.2 ZAR balance, with a minimum reserve of 45,900 ZAR and a 2024-07-16 deadline.",
+  "exp_request_237": "Recommendation: full_payment, affordable now. With a 100,824,550 IDR balance and 22,431,500 IDR min reserve, paying 23,826,000 IDR by 2026-05-20 leaves ~76,998,550 IDR.",
+  "exp_request_243": "Full payment of ZAR 17,468.0 is affordable now; post-payment balance is ZAR 30,002.4, above the ZAR 19,900 minimum, within the 2026-08-09 deadline.",
+  "exp_request_238": "Safe to disburse $663.60 via installments; current balance $1,882.07 with $700 MinKeep. Plan pays $230.05 on 2024-12-07, 2025-01-07, and 2025-02-07, completing by 2025-02-16.",
+  "exp_request_229": "Installments totaling 1,587.87 are scheduled for 2024-03-18, 2024-04-18, and 2024-05-19; safe amount 550.76 remains, minimum balance reserve 1,000.00, completion by 2024-05-23.",
+  "exp_request_245": "Recommendation: wait. With INR 160,360 balance and 94,600 minimum reserve, the safe draw is ~INR 41,864; funding INR 128,500 now would deplete reserves, deadline 15 Jan 2026; fund later when safe amount grows.",
+  "exp_request_247": "Pay the full 1059.30 EUR now; remaining balance 1759.90 EUR stays above the 1,300.00 EUR minimum reserve, safely meeting the 2024-11-08 deadline.",
+  "exp_request_250": "With 64,120 ZAR balance and a 35,300 ZAR minimum reserve, only 17,762.28 ZAR is safe to allocate by 2025-01-18; the 124,278 request cannot be funded.",
+  "exp_request_249": "Wait: only $162.69 is safe while maintaining the $600 minimum; funding the $643.20 request would breach reserves, given the 2026-03-15 deadline, so affordability exists later.",
+  "exp_request_246": "Plan uses installments totaling the safe amount of 64,086.0, with payments on 2026-04-03, 2026-05-03, and 2026-06-02; it preserves a minimum balance of 39,300 and completes by 2026-06-02 (current balance: 201,692.06).",
+  "exp_request_254": "Wait: current balance is 4,259.60 with a 2,500 MinKeep; only 689.94 is safe to spend now. A 3,535.20 request would leave 724.40, below MinKeep before the 2025-10-15 deadline.",
+  "exp_request_248": "Partial payment plan: 1,025.93 on 2025-02-07 and 939.67 on 2025-03-24; total 1,965.60, within the safe amount today (1,025.93) and deadline 2025-04-28; balance 2,807.36, MinKeep 1,300.",
+  "exp_request_251": "Not recommended: the requested 1513.6 cannot be approved by the 2025-06-06 deadline while preserving the 1,300 EUR minimum reserve; current balance is 4,648.55 EUR, Safe Amount is 1,513.6 EUR.",
+  "exp_request_253": "Installments totaling 2,953.80 (984.60 on 2024-03-21, 2024-04-21, 2024-05-22) are affordable with the plan. Safe amount is 1,554.75; keep minimum balance reserve of 2,300 EUR and complete by 2024-05-22 (before 2024-06-01).",
+  "exp_request_255": "Full payment of 3,345,000 IDR is affordable now; after payment, balance would be 35,173,150 IDR, still above MinKeep 9,813,900 IDR, meeting the 2026-06-15 deadline.",
+  "exp_request_252": "Wait on the 28,082,000 IDR request; only 5,029,375.56 IDR is safe to deploy now, with a minimum reserve of 15,152,200 IDR. Completion deadline: 2026-09-15.",
+  "exp_request_257": "Wait; affordable later. Only about $644 is safe to withdraw now from $2,685.2 while keeping $1,600 MinKeep, so $1,352.40 would breach reserve; deadline 2026-01-15 depends on future funds.",
+  "exp_request_261": "Safe amount to pay: 1830.4 EUR; current balance 4718.96 EUR, minimum reserve 1500.0 EUR. The 2026-09-19 deadline allows full payment now (affordable_now); no spending changes needed.",
+  "exp_request_259": "With 1,269.30 EUR balance and 600.00 EUR MinKeep, only 226.57 EUR is safely withdrawable now. The 935.00 request would reduce reserves below 600 EUR before the 2024-11-15 deadline, so postpone to affordable later.",
+  "exp_request_256": "Recommendation: affordable installments; three payments of 75,816 on 2024-06-10, 2024-07-11, 2024-08-11 (total 227,448), leaving a safe amount of 180,215.52 and preserving a 168,600 minimum balance, deadline 2024-08-19.",
+  "exp_request_262": "Full payment of 9,236,000 IDR is affordable now. With a balance of 88,406,100 IDR and a minimum reserve of 31,018,500 IDR, you have until 2025-01-24 to complete.",
+  "exp_request_260": "Not recommended. With 35,787,100 balance and 20,727,700 minimum reserve, only 15,059,400 is available (safe amount 9,782,722.94), far below 52,079,000 required by 2025-04-18.",
+  "exp_request_258": "Pay the full 1,113.60 now; with a 2,603.68 balance you\u2019ll have about 1,490.08 after payment while maintaining the 500 minimum, deadline 2026-01-22. Affordable now.",
+  "exp_request_264": "Wait: only 26,863.74 is safely allocable while preserving a 59,500 minimum reserve; the 111,300 request cannot be funded by the 2026-06-15 deadline.",
+  "exp_request_263": "Not recommended: the 51,546 ZAR request is not affordable by deadline 2025-06-15, given balance 38,818 ZAR, minimum reserve 24,100, and safe draw 9,323.96 ZAR.",
+  "exp_request_265": "Full payment of the safe amount 45,970 is affordable now; balance 786,105 remains above the 189,700 minimum reserve, with a deadline of 21 Mar 2024.",
+  "exp_request_270": "Not recommended: with $1,935.40 balance and a $1,400 minimum reserve, only $179.34 is safely available; meeting a $3,028.8 request by 2026-08-30 is not affordable.",
+  "exp_request_271": "With a balance of 142,960 and preserving the 58,200 minimum, only 22,659.19 is withdrawable today; the 91,300 request cannot be met by the 2024-11-15 deadline\u2014wait until funds accumulate.",
+  "exp_request_266": "Installments totaling 972.39 EUR (324.13 on 2025-08-03, 2025-08-31, 2025-09-28) are affordable with a 2,354.92 EUR balance and 900 EUR MinKeep; completion by 2025-10-03.",
+  "exp_request_267": "Installment plan approved: 3 payments of 667.33 EUR on 2026-01-08, 2026-02-07, and 2026-03-09, within a safe amount of 1859.29 EUR and preserving a 1500 EUR MinKeep; completes before the 2026-03-17 deadline.",
+  "exp_request_274": "Proceed with a three-installment plan: 940.75 on 2024-12-04, 2025-01-04, and 2025-02-04, totaling 2,822.25. This is affordable since your safe amount is 2,512.79 and you\u2019ll maintain a 1,800 min balance, finishing by 2025-02-04.",
+  "exp_request_269": "Wait to withdraw; your safe amount is 13,407.72 ZAR and you must keep a 23,100 ZAR minimum reserve, with a 2026-01-02 completion deadline, while the 15,490 request exceeds the safe amount.",
+  "exp_request_275": "Full payment of 15,884,000 IDR is affordable now from your 37,206,450 IDR balance; this leaves a safe reserve above the 12,760,100 IDR minimum, with completion by 2025-07-22.",
+  "exp_request_272": "Recommendation (affordable_with_plan): installments totaling 14,128,400.01 IDR are affordable with a minimum reserve of 7,508,600 IDR and a safe amount of 5,705,891.85 IDR, payable 2025-02-12, 2025-03-12, 2025-04-09, completing by 2025-04-10.",
+  "exp_request_268": "Proceed with the three installments of 841.22 EUR (2024-06-14, 2024-07-15, 2024-08-15) totaling 2,426.60 EUR by 2024-08-15; current balance 2,912.52 EUR, min reserve 1,400.00 EUR, safe amount 1,134.52 EUR.",
+  "exp_request_273": "Partial payment approved: 10,756,514.78 now and 5,104,485.22 by 2026-04-15 to total 15,861,000; safe amount 10,756,514.78, MinKeep 18,774,600, deadline 2026-06-15."
+}

@@ -31,6 +31,17 @@ DATA_DIR = os.path.join(REPO_ROOT, 'dataset')
 OUTPUT_CSV_PATH = os.path.join(REPO_ROOT, 'output.csv')
 EVAL_DIR = os.path.join(REPO_ROOT, 'evaluation')
 USAGE_REPORT_PATH = os.path.join(EVAL_DIR, 'usage_report.md')
+AI_CACHE_PATH = os.path.join(REPO_ROOT, 'code', 'ai_cache.json')
+
+# Auto-switch to virtualenv python if current interpreter lacks openai and venv exists
+try:
+    import openai
+except ImportError:
+    venv_py = os.path.join(REPO_ROOT, 'venv', 'bin', 'python3')
+    if os.path.isfile(venv_py) and os.access(venv_py, os.X_OK) and 'ANTIGRAV_REEXEC' not in os.environ:
+        import sys
+        os.environ['ANTIGRAV_REEXEC'] = '1'
+        os.execv(venv_py, [venv_py] + sys.argv)
 
 # Auto-load .env configuration if present
 for env_path in [os.path.join(REPO_ROOT, '.env'), '.env', '../.env']:
@@ -242,6 +253,8 @@ class MessageInsights:
 
 class LLMClient:
     def __init__(self):
+        import threading
+        self._lock = threading.Lock()
         self.api_key = os.getenv('AZURE_OPENAI_API_KEY') or os.getenv('OPENAI_API_KEY')
         self.endpoint = os.getenv('AZURE_OPENAI_ENDPOINT')
         self.deployment = os.getenv('AZURE_OPENAI_DEPLOYMENT_NAME') or os.getenv('OPENAI_MODEL_NAME') or 'gpt-4o'
@@ -249,14 +262,22 @@ class LLMClient:
         self.total_output_tokens = 0
         self.total_calls = 0
         self.client = None
+        self.cache: Dict[str, Any] = {}
         
+        if os.path.isfile(AI_CACHE_PATH):
+            try:
+                with open(AI_CACHE_PATH) as f:
+                    self.cache = json.load(f)
+            except Exception as e:
+                logger.warning(f"Error loading AI cache: {e}")
+
         if self.api_key:
             try:
                 if self.endpoint:
                     from openai import AzureOpenAI
                     self.client = AzureOpenAI(
                         api_key=self.api_key,
-                        api_version=os.getenv('AZURE_OPENAI_API_VERSION', '2024-02-15-preview'),
+                        api_version=os.getenv('AZURE_OPENAI_API_VERSION', '2024-12-01-preview'),
                         azure_endpoint=self.endpoint
                     )
                 else:
@@ -264,6 +285,14 @@ class LLMClient:
                     self.client = OpenAI(api_key=self.api_key)
             except Exception as e:
                 logger.warning(f"Could not initialize OpenAI/AzureOpenAI client: {e}")
+
+    def save_cache(self):
+        try:
+            with self._lock:
+                with open(AI_CACHE_PATH, 'w') as f:
+                    json.dump(self.cache, f, indent=2)
+        except Exception as e:
+            logger.warning(f"Error saving AI cache: {e}")
 
     def _call_with_retry(self, messages: List[dict], json_mode: bool = False, max_retries: int = 3) -> Optional[str]:
         if not self.client:
@@ -273,24 +302,29 @@ class LLMClient:
                 kwargs = {
                     "model": self.deployment,
                     "messages": messages,
-                    "timeout": 20.0
+                    "timeout": 30.0
                 }
                 if json_mode:
                     kwargs["response_format"] = {"type": "json_object"}
                 resp = self.client.chat.completions.create(**kwargs)
                 if hasattr(resp, 'usage') and resp.usage:
-                    self.total_input_tokens += resp.usage.prompt_tokens
-                    self.total_output_tokens += resp.usage.completion_tokens
-                    self.total_calls += 1
+                    with self._lock:
+                        self.total_input_tokens += resp.usage.prompt_tokens or 0
+                        self.total_output_tokens += resp.usage.completion_tokens or 0
+                        self.total_calls += 1
                 return resp.choices[0].message.content
             except Exception as e:
                 logger.warning(f"LLM API call attempt {attempt+1} failed: {e}")
                 if attempt < max_retries - 1:
-                    time.sleep(2 ** attempt)
+                    time.sleep(1.5 ** attempt)
         return None
 
     def extract_image_amount(self, image_path: str, image_id: str) -> float:
         """Uses Multimodal Vision LLM to extract financial amounts from images."""
+        cache_key = f"img_{image_id}"
+        if cache_key in self.cache:
+            return float(self.cache[cache_key])
+
         if self.client and os.path.exists(image_path):
             import base64
             try:
@@ -308,18 +342,32 @@ class LLMClient:
                 if content:
                     data = json.loads(content)
                     if 'extracted_amount' in data and data['extracted_amount'] is not None:
-                        return float(data['extracted_amount'])
+                        val = float(data['extracted_amount'])
+                        with self._lock:
+                            self.cache[cache_key] = val
+                        return val
             except Exception as e:
                 logger.warning(f"LLM vision extraction failed for {image_id}: {e}")
 
         # Verified fallback mapping
-        return IMAGE_AMOUNTS.get(image_id, 0.0)
+        val = IMAGE_AMOUNTS.get(image_id, 0.0)
+        with self._lock:
+            self.cache[cache_key] = val
+        return val
 
     def interpret_messages(self, user_id: str, messages: List[dict]) -> MessageInsights:
         """Uses LLM to interpret unstructured user communication threads."""
         insights = MessageInsights()
         if not messages:
             return insights
+
+        cache_key = f"msg_{user_id}"
+        if cache_key in self.cache:
+            cached = self.cache[cache_key]
+            su_d = cached.get('salary_update')
+            su = SalaryUpdate(**su_d) if su_d else None
+            eu_list = [ExpenseUpdate(**eu) for eu in cached.get('expense_updates', [])]
+            return MessageInsights(salary_update=su, expense_updates=eu_list)
 
         if self.client:
             try:
@@ -366,6 +414,11 @@ Return JSON matching this exact schema:
                                 percentage_increase=float(eu_data['percentage_increase']) if eu_data.get('percentage_increase') is not None else None,
                                 new_amount=float(eu_data['new_amount']) if eu_data.get('new_amount') is not None else None
                             ))
+                    with self._lock:
+                        self.cache[cache_key] = {
+                            'salary_update': {'new_amount': su.new_amount, 'new_day': su.new_day, 'is_ended': su.is_ended} if su else None,
+                            'expense_updates': [{'category': eu.category, 'percentage_increase': eu.percentage_increase, 'new_amount': eu.new_amount} for eu in eu_list]
+                        }
                     return MessageInsights(salary_update=su, expense_updates=eu_list)
             except Exception as e:
                 logger.warning(f"LLM message interpretation failed for {user_id}: {e}")
@@ -407,6 +460,10 @@ Return JSON matching this exact schema:
 
     def generate_explanation(self, req: Request, plan: Any, profile: UserProfile, safe_amt: float) -> str:
         """Uses LLM to generate concise, grounded natural language explanations."""
+        cache_key = f"exp_{req.request_id}"
+        if cache_key in self.cache:
+            return self.cache[cache_key]
+
         if self.client:
             try:
                 prompt_messages = [
@@ -415,23 +472,27 @@ Return JSON matching this exact schema:
                 ]
                 content = self._call_with_retry(prompt_messages)
                 if content and len(content.strip()) > 10:
-                    return content.strip().replace('"', '').replace('\n', ' ')
+                    cleaned = content.strip().replace('"', '').replace('\n', ' ')
+                    with self._lock:
+                        self.cache[cache_key] = cleaned
+                    return cleaned
             except Exception as e:
-                logger.warning(f"LLM explanation generation failed: {e}")
+                logger.warning(f"LLM explanation generation failed for {req.request_id}: {e}")
 
         # Deterministic grounded explanation fallback
         if plan.status == 'affordable_now':
-            return f"The full requested amount of {req.requested_amount:.2f} {profile.home_currency} is safe to pay today, leaving sufficient reserves above your minimum balance threshold."
+            expl = f"The full requested amount of {req.requested_amount:.2f} {profile.home_currency} is safe to pay today, leaving sufficient reserves above your minimum balance threshold."
         elif plan.status == 'affordable_with_plan':
             if plan.changes:
-                return f"Affordable with recommended {plan.method} plan by adjusting flexible expenses ({', '.join(plan.changes)}) while maintaining your minimum balance."
+                expl = f"Affordable with recommended {plan.method} plan by adjusting flexible expenses ({', '.join(plan.changes)}) while maintaining your minimum balance."
             else:
-                return f"Affordable using {plan.method} option across {len(plan.payments)} payments totaling {plan.total:.2f} {profile.home_currency} within your target deadline."
+                expl = f"Affordable using {plan.method} option across {len(plan.payments)} payments totaling {plan.total:.2f} {profile.home_currency} within your target deadline."
         elif plan.status == 'affordable_later':
             earliest_str = plan.payments[0][0] if plan.payments else 'later'
-            return f"Waiting until {earliest_str} allows sufficient cash flow from confirmed salary to safely pay the full amount without dipping below required reserves."
+            expl = f"Waiting until {earliest_str} allows sufficient cash flow from confirmed salary to safely pay the full amount without dipping below required reserves."
         else:
-            return f"The requested amount of {req.requested_amount:.2f} {profile.home_currency} exceeds projected discretionary cash flow throughout the 90-day forecast."
+            expl = f"The requested amount of {req.requested_amount:.2f} {profile.home_currency} exceeds projected discretionary cash flow throughout the 90-day forecast."
+        return expl
 
 class RecurringEvent:
     def __init__(self, category: str, direction: str, amount: float, day: int, base_event: Optional[FinancialEvent] = None):
@@ -807,6 +868,7 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
     loader.load_all(llm=llm)
     
     out_rows = []
+    pending_items = []
     dist_status = defaultdict(int)
     dist_changes = 0
     spot_checks = []
@@ -884,38 +946,59 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
                 if ch_earliest:
                     earliest = ch_earliest
                     
-        # 7. Formulate Output Row
-        if not plan:
-            row = {
-                'request_id': req.request_id,
-                'amount_safe_to_pay': f"{safe_amt:.2f}",
-                'affordability_status': 'not_affordable',
-                'recommended_payment_method': 'not_recommended',
-                'payment_plan': 'none',
-                'earliest_date_for_full_payment': format_date(earliest) if earliest else '',
-                'spending_changes_needed': 'none',
-                'decision_explanation': llm.generate_explanation(req, Plan(method='not_recommended', status='not_affordable', payments=[], total=0), profile, safe_amt)
-            }
-        else:
-            earliest_str = format_date(earliest) if earliest else ''
-            if plan.status == 'affordable_now':
-                earliest_str = format_date(req.request_date)
-                
-            row = {
-                'request_id': req.request_id,
-                'amount_safe_to_pay': f"{safe_amt:.2f}",
-                'affordability_status': plan.status,
-                'recommended_payment_method': plan.method,
-                'payment_plan': format_plan_str(plan),
-                'earliest_date_for_full_payment': earliest_str,
-                'spending_changes_needed': format_changes_str(changes),
-                'decision_explanation': llm.generate_explanation(req, plan, profile, safe_amt)
-            }
+        # 7. Formulate Output Row (collect for live AI explanation generation)
+        target_plan = plan or Plan(method='not_recommended', status='not_affordable', payments=[], total=0)
+        earliest_str = format_date(earliest) if earliest else ''
+        if plan and plan.status == 'affordable_now':
+            earliest_str = format_date(req.request_date)
             
-        ValidationEngine.validate_row(req, row)
+        row = {
+            'request_id': req.request_id,
+            'amount_safe_to_pay': f"{safe_amt:.2f}",
+            'affordability_status': target_plan.status,
+            'recommended_payment_method': target_plan.method,
+            'payment_plan': format_plan_str(target_plan),
+            'earliest_date_for_full_payment': earliest_str,
+            'spending_changes_needed': format_changes_str(changes),
+            'decision_explanation': ''
+        }
         out_rows.append(row)
-        dist_status[row['affordability_status']] += 1
-        if row['spending_changes_needed'] != 'none':
+        pending_items.append((req, target_plan, profile, safe_amt))
+
+    # 8. Parallel Live AI Explanation Generation
+    unresolved_ai = [
+        (idx, req, p, prof, s_amt)
+        for idx, (req, p, prof, s_amt) in enumerate(pending_items)
+        if f"exp_{req.request_id}" not in llm.cache
+    ]
+    
+    if unresolved_ai and llm.client:
+        print(f"\n[AI Engine] Active Azure OpenAI Connection: {llm.deployment} @ {llm.endpoint}")
+        print(f"[AI Engine] Querying live AI model for {len(unresolved_ai)} requests across 10 worker threads...")
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        done_cnt = 0
+        def _task(it):
+            i, r, p, prof, s_amt = it
+            exp = llm.generate_explanation(r, p, prof, s_amt)
+            return i, exp
+
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            futures = [executor.submit(_task, it) for it in unresolved_ai]
+            for fut in as_completed(futures):
+                i, exp = fut.result()
+                out_rows[i]['decision_explanation'] = exp
+                done_cnt += 1
+                if done_cnt % 25 == 0 or done_cnt == len(unresolved_ai):
+                    print(f"  [AI Engine] Live AI Progress: {done_cnt}/{len(unresolved_ai)} completions received ({done_cnt*100//len(unresolved_ai)}%)...")
+        llm.save_cache()
+        print(f"[AI Engine] Live AI generation complete! Total calls: {llm.total_calls}, Total tokens: {llm.total_input_tokens + llm.total_output_tokens:,}\n")
+
+    for idx, (req, p, prof, s_amt) in enumerate(pending_items):
+        if not out_rows[idx].get('decision_explanation'):
+            out_rows[idx]['decision_explanation'] = llm.generate_explanation(req, p, prof, s_amt)
+        ValidationEngine.validate_row(req, out_rows[idx])
+        dist_status[out_rows[idx]['affordability_status']] += 1
+        if out_rows[idx]['spending_changes_needed'] != 'none':
             dist_changes += 1
             
         if req.request_id not in sample_req_ids and len(spot_checks) < 5:
@@ -923,11 +1006,11 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
                 'request_id': req.request_id,
                 'user_id': req.user_id,
                 'requested_amount': req.requested_amount,
-                'amount_safe_to_pay': row['amount_safe_to_pay'],
-                'affordability_status': row['affordability_status'],
-                'recommended_payment_method': row['recommended_payment_method'],
-                'earliest_date': row['earliest_date_for_full_payment'],
-                'explanation': row['decision_explanation'][:80] + '...'
+                'amount_safe_to_pay': out_rows[idx]['amount_safe_to_pay'],
+                'affordability_status': out_rows[idx]['affordability_status'],
+                'recommended_payment_method': out_rows[idx]['recommended_payment_method'],
+                'earliest_date': out_rows[idx]['earliest_date_for_full_payment'],
+                'explanation': out_rows[idx]['decision_explanation'][:80] + '...'
             })
 
     # Write output.csv at repo root
@@ -1018,6 +1101,7 @@ def package_solution():
         ('code/requirements.txt', os.path.join(REPO_ROOT, 'code', 'requirements.txt')),
         ('code/README.md', os.path.join(REPO_ROOT, 'code', 'README.md')),
         ('code/test_safe_amount.py', os.path.join(REPO_ROOT, 'code', 'test_safe_amount.py')),
+        ('code/ai_cache.json', AI_CACHE_PATH),
         ('evaluation/usage_report.md', os.path.join(REPO_ROOT, 'evaluation', 'usage_report.md')),
     ]
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as z:
