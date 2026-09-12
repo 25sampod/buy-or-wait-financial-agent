@@ -547,29 +547,47 @@ class RecurrenceDetector:
             evs.sort(key=lambda x: x.date)
             if not evs:
                 continue
-            
+
             # If credit (income/salary), check if the most recent event indicates termination
             if dir_ == 'credit':
                 latest_desc = (evs[-1].description or '').lower()
                 if any(kw in latest_desc for kw in TERMINATION_KEYWORDS):
                     continue  # Hard stop: terminated income must NOT recur
-            
-            # Rule: 5% tolerance from latest amount
-            base_event = evs[-1]
-            base_amt = base_event.amount
-            if base_amt <= 0:
-                continue
-                
-            calendar_group = [e for e in evs if abs(e.amount - base_amt) / base_amt <= 0.05]
-            months = set((e.date.year, e.date.month) for e in calendar_group)
-            
-            if len(months) >= 3:
+
+            # A single (category, direction) bucket can contain more than one
+            # underlying sub-stream at genuinely different amounts (e.g. a
+            # fixed monthly "Base salary" credit mixed with a variable
+            # "Performance commission" credit that both post under
+            # category=salary/direction=credit). Anchoring the 5% tolerance
+            # band on the single most-recent event conflates these and can
+            # cause the whole bucket to fail the 3-month recurrence test even
+            # though a clear, stable sub-stream exists. Instead, try every
+            # event in the bucket as a candidate anchor and keep the largest
+            # cluster (by event count) that spans at least 3 distinct months.
+            best_cluster = None
+            best_months = None
+            for anchor in evs:
+                if anchor.amount is None or anchor.amount <= 0:
+                    continue
+                cluster = [e for e in evs if abs(e.amount - anchor.amount) / anchor.amount <= 0.05]
+                months = set((e.date.year, e.date.month) for e in cluster)
+                if len(months) >= 3 and (best_cluster is None or len(cluster) > len(best_cluster)):
+                    best_cluster = cluster
+                    best_months = months
+
+            if best_cluster is not None:
+                calendar_group = best_cluster
+                base_event = max(calendar_group, key=lambda x: x.date)
                 days = [e.date.day for e in calendar_group]
                 mode_day = max(set(days), key=days.count)
                 amts = sorted([e.amount for e in calendar_group])
                 median_amt = amts[len(amts)//2]
                 recurring.append(RecurringEvent(cat, dir_, median_amt, mode_day, base_event))
             else:
+                base_event = evs[-1]
+                base_amt = base_event.amount
+                if base_amt is None or base_amt <= 0:
+                    continue
                 if dir_ == 'debit' and cat in ('groceries', 'transport', 'dining'):
                     latest_date = evs[-1].date
                     cutoff = latest_date - datetime.timedelta(days=90)
