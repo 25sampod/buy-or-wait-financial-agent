@@ -88,18 +88,13 @@ class TestSafeAmount(unittest.TestCase):
         safe = compute_safe_amount(balances, 200, 1000)
         self.assertEqual(safe, 500.0)
 
-class TestImageConsistency(unittest.TestCase):
-    def test_image_amounts_match_cache(self):
-        import json, os
-        from main import IMAGE_AMOUNTS, REPO_ROOT
-        cache_path = os.path.join(REPO_ROOT, 'code', 'ai_cache.json')
-        if os.path.exists(cache_path):
-            with open(cache_path) as f:
-                cache = json.load(f)
-            for img_id, amt in IMAGE_AMOUNTS.items():
-                cached = cache.get(f"img_{img_id}")
-                self.assertIsNotNone(cached, f"Missing cache entry for {img_id}")
-                self.assertAlmostEqual(cached, amt, places=3, msg=f"Mismatch on {img_id}: hardcoded {amt} vs cached {cached}")
+class TestImageProcessing(unittest.TestCase):
+    def test_image_fallback_without_client(self):
+        from main import LLMClient
+        llm = LLMClient()
+        llm.client = None
+        amt = llm.extract_image_amount("dummy/path.png", "dummy_image")
+        self.assertEqual(amt, 0.0, "Without API client, image extraction must return 0.0 safely without hardcoded tables")
 
 class TestSalaryTermination(unittest.TestCase):
     def test_salary_termination_description(self):
@@ -135,12 +130,11 @@ class TestSalaryTermination(unittest.TestCase):
         self.assertEqual(len(salary_projected), 0)
 
 class TestUsageReport(unittest.TestCase):
-    def test_cached_usage_report_metrics(self):
+    def test_offline_usage_report_metrics(self):
         import os
         from main import LLMClient, generate_usage_report, USAGE_REPORT_PATH
         llm = LLMClient()
         llm.live_calls_this_run = 0
-        llm.cache_hits_this_run = 464
         llm.total_input_tokens = 0
         llm.total_output_tokens = 0
         generate_usage_report(llm)
@@ -149,11 +143,9 @@ class TestUsageReport(unittest.TestCase):
         with open(USAGE_REPORT_PATH) as f:
             content = f.read()
             
-        self.assertIn("Offline cached evaluation run", content)
+        self.assertIn("Deterministic dataset execution", content)
         self.assertIn("0 calls", content)
-        self.assertIn("464 hits", content)
         self.assertIn("$0.0000", content)
-        self.assertNotIn("464 calls", content)
 
 if __name__ == '__main__':
     unittest.main()

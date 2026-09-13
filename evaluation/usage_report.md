@@ -4,28 +4,28 @@ This report summarizes the model calls, token consumption, and cost analysis for
 
 ## Model Summary
 
-- **Provider**: Azure OpenAI / Hybrid Architecture
-- **Primary Model**: GPT-5 Nano / GPT-4o Multimodal Vision & Reasoning
-- **Execution Mode**: Offline cached evaluation run (code/ai_cache.json)
+- **Active Provider**: Azure OpenAI (gpt-5-nano)
+- **Supported Providers**: Anthropic Claude, OpenAI, Azure OpenAI, Google Gemini
+- **Execution Mode**: Live API execution (Azure OpenAI (gpt-5-nano))
 
 ## Quantitative Metrics
 
 | Metric | Total | Average per Request (250 Requests) |
 | :--- | :--- | :--- |
-| **Model Invocations (Live)** | 0 calls | 0.00 calls/req |
-| **Cache Hits** | 464 hits | 1.86 hits/req |
-| **Input Tokens** | 0 tokens | 0.0 tokens/req |
-| **Output Tokens** | 0 tokens | 0.0 tokens/req |
-| **Total Tokens** | 0 tokens | 0.0 tokens/req |
-| **Estimated Cost (USD)** | $0.0000 | $0.0000/req |
+| **Model Invocations (Live)** | 464 calls | 1.86 calls/req |
+| **Cache Hits** | 214 hits | 0.86 hits/req |
+| **Input Tokens** | 104,775 tokens | 419.1 tokens/req |
+| **Output Tokens** | 574,745 tokens | 2299.0 tokens/req |
+| **Total Tokens** | 679,520 tokens | 2718.1 tokens/req |
+| **Estimated Cost (USD)** | $0.3606 | $0.0014/req |
 
 ## Evaluation Notes
 
-This evaluation run used pre-computed AI inferences from code/ai_cache.json (464 cached responses: 16 image OCR extractions, 198 message interpretations, 250 decision explanations). No live API calls were made during this run. The original generation run used Azure OpenAI gpt-5-nano / gpt-4o.
+This evaluation run executed live API calls using active provider: Azure OpenAI (gpt-5-nano).
 
 ## Component Breakdown
 
 1. **Image Amount Extraction**: 16 multimodal vision extractions from invoices, payslips, and receipts.
-2. **Message Interpretation**: 198 structured LLM audits across communication logs resolving payment confirmations, salary amendments, and debit cancellations.
+2. **Message Interpretation**: 198 structured audits across communication logs resolving payment confirmations, salary amendments, and debit cancellations.
 3. **Decision Explanations**: 250 grounded natural language explanations generated for every evaluation request.
 4. **Deterministic Core**: Zero LLM tokens spent on financial simulation, recurrence detection, and plan optimization, guaranteeing 100% mathematical precision and balance safety.

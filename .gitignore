@@ -2,6 +2,13 @@
 log.txt
 .env
 .env.*
+.env.local
+*.env.local
+code/.env
+code/.env.local
+*.env
+!.env.example
+!code/.env.example
 
 # Python environment & cache
 venv/
@@ -13,3 +20,5 @@ __pycache__/
 # OS artifacts
 .DS_Store
 *.DS_Store
+*.log
+run.log

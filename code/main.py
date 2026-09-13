@@ -7,10 +7,27 @@ from typing import List, Dict, Any, Optional, Tuple, Set
 from dataclasses import dataclass, field
 import math
 import time
+import sys
 import logging
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Configure comprehensive runtime logging (console + run.log file in script directory)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+RUN_LOG_PATH = os.path.join(SCRIPT_DIR, 'run.log')
+
+file_handler = logging.FileHandler(RUN_LOG_PATH, mode='w', encoding='utf-8')
+file_handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s'))
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s'))
+
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.INFO)
+if root_logger.hasHandlers():
+    root_logger.handlers.clear()
+root_logger.addHandler(file_handler)
+root_logger.addHandler(console_handler)
+
+logger = logging.getLogger('BuyOrWait')
+logger.info(f"Execution initialized. Raw runtime log written to: {RUN_LOG_PATH}")
 
 def find_repo_root() -> str:
     """Finds the root repository directory regardless of execution working dir."""
@@ -31,7 +48,6 @@ DATA_DIR = os.path.join(REPO_ROOT, 'dataset')
 OUTPUT_CSV_PATH = os.path.join(REPO_ROOT, 'output.csv')
 EVAL_DIR = os.path.join(REPO_ROOT, 'evaluation')
 USAGE_REPORT_PATH = os.path.join(EVAL_DIR, 'usage_report.md')
-AI_CACHE_PATH = os.path.join(REPO_ROOT, 'code', 'ai_cache.json')
 
 # Auto-switch to virtualenv python if current interpreter lacks openai and venv exists
 try:
@@ -43,21 +59,64 @@ except ImportError:
         os.environ['ANTIGRAV_REEXEC'] = '1'
         os.execv(venv_py, [venv_py] + sys.argv)
 
-# Auto-load .env configuration if present
-for env_path in [os.path.join(REPO_ROOT, '.env'), '.env', '../.env']:
-    if os.path.exists(env_path):
+# Auto-load .env and .env.local configuration if present (.env.local overrides .env)
+def _load_env_configs():
+    initial_keys = set(os.environ.keys())
+    loaded_files = []
+    
+    # Priority: base .env files loaded first, then .env.local overrides
+    base_env_candidates = [
+        os.path.join(REPO_ROOT, '.env'),
+        os.path.join(SCRIPT_DIR, '.env'),
+        os.path.join(REPO_ROOT, 'code', '.env'),
+        '.env',
+    ]
+    local_env_candidates = [
+        os.path.join(REPO_ROOT, '.env.local'),
+        os.path.join(SCRIPT_DIR, '.env.local'),
+        os.path.join(REPO_ROOT, 'code', '.env.local'),
+        '.env.local',
+    ]
+    
+    def _read_env_file(filepath, allow_override=False):
+        if not os.path.isfile(filepath):
+            return False
+        found_any = False
         try:
-            with open(env_path) as f:
+            with open(filepath, 'r', encoding='utf-8') as f:
                 for line in f:
                     line = line.strip()
                     if line and not line.startswith('#') and '=' in line:
                         k, v = line.split('=', 1)
-                        k, v = k.strip(), v.strip().strip("'").strip('"')
-                        if k and v and k not in os.environ:
-                            os.environ[k] = v
-            break
+                        k = k.strip()
+                        v = v.strip().strip("'").strip('"')
+                        if k and k not in initial_keys:
+                            if allow_override or k not in os.environ:
+                                os.environ[k] = v
+                                found_any = True
+            return found_any
         except Exception as e:
-            logger.warning(f"Error loading .env from {env_path}: {e}")
+            logger.warning(f"Error loading {filepath}: {e}")
+            return False
+
+    # 1. Load base .env
+    for p in base_env_candidates:
+        if os.path.isfile(p):
+            if _read_env_file(p, allow_override=False):
+                loaded_files.append(p)
+            break
+
+    # 2. Load .env.local (takes precedence over base .env)
+    for p in local_env_candidates:
+        if os.path.isfile(p):
+            if _read_env_file(p, allow_override=True):
+                loaded_files.append(p)
+            break
+
+    if loaded_files:
+        logger.info(f"Loaded environment variables from: {', '.join(loaded_files)}")
+
+_load_env_configs()
 
 def parse_date(date_str: str) -> datetime.date:
     return datetime.datetime.strptime(date_str.strip(), "%Y-%m-%d").date()
@@ -65,25 +124,6 @@ def parse_date(date_str: str) -> datetime.date:
 def format_date(d: datetime.date) -> str:
     return d.strftime("%Y-%m-%d")
 
-# Verified exact amounts extracted from the 16 challenge media images
-IMAGE_AMOUNTS: Dict[str, float] = {
-    'image_01': 4365000.0,
-    'image_02': 100000.0,
-    'image_03': 41272.0,
-    'image_04': 2854.0,
-    'image_05': 704.05,
-    'image_06': 1995.0,
-    'image_07': 8528.1,
-    'image_08': 15339.0,
-    'image_09': 723.0,
-    'image_10': 79679.26,
-    'image_11': 3650.0,
-    'image_12': 33.50,
-    'image_13': 2298.0,
-    'image_14': 4543.0,
-    'image_15': 9968.0,
-    'image_16': 393.22,
-}
 
 class FinancialEvent:
     def __init__(self, **kwargs):
@@ -182,37 +222,50 @@ class DataLoader:
         self.images: Dict[str, str] = {} # event_id -> image_id
         
     def load_all(self, llm: Optional['LLMClient'] = None):
-        with open(os.path.join(self.data_dir, 'financial_profiles.csv')) as f:
+        with open(os.path.join(self.data_dir, 'financial_profiles.csv'), 'r', encoding='utf-8-sig') as f:
             for row in csv.DictReader(f):
                 self.profiles[row['user_id']] = UserProfile(**row)
                 
-        with open(os.path.join(self.data_dir, 'requests.csv')) as f:
+        with open(os.path.join(self.data_dir, 'requests.csv'), 'r', encoding='utf-8-sig') as f:
             for row in csv.DictReader(f):
                 self.requests.append(Request(**row))
 
-        with open(os.path.join(self.data_dir, 'exchange_rates.csv')) as f:
+        with open(os.path.join(self.data_dir, 'exchange_rates.csv'), 'r', encoding='utf-8-sig') as f:
             for row in csv.DictReader(f):
                 d = parse_date(row['rate_date'])
                 self.rates[(d, row['from_currency'], row['to_currency'])] = float(row['rate'])
 
         if os.path.exists(os.path.join(self.data_dir, 'images.csv')):
-            with open(os.path.join(self.data_dir, 'images.csv')) as f:
+            with open(os.path.join(self.data_dir, 'images.csv'), 'r', encoding='utf-8-sig') as f:
                 for row in csv.DictReader(f):
                     if row.get('related_event_id'):
                         self.images[row['related_event_id']] = row['image_id']
 
+        # Concurrent batch extraction of all images across up to 16 threads (instead of 1-by-1)
+        if self.images and llm and llm.client:
+            from concurrent.futures import ThreadPoolExecutor
+            unique_imgs = sorted(list(set(self.images.values())))
+            print(f"[AI Vision] Pre-extracting {len(unique_imgs)} images concurrently across {min(len(unique_imgs), 20)} threads...")
+            def _extract_task(img_id):
+                img_path = os.path.join(self.data_dir, 'media', 'images', f"{img_id}.png")
+                llm.extract_image_amount(img_path, img_id)
+            with ThreadPoolExecutor(max_workers=min(len(unique_imgs), 20)) as pool:
+                list(pool.map(_extract_task, unique_imgs))
+            print("[AI Vision] All image extractions complete.")
+
         raw_events = []
-        with open(os.path.join(self.data_dir, 'financial_events.csv')) as f:
+        with open(os.path.join(self.data_dir, 'financial_events.csv'), 'r', encoding='utf-8-sig') as f:
             for row in csv.DictReader(f):
                 ev = FinancialEvent(**row)
-                # Fill amount from image using Multimodal Vision LLM or verified fallback
+                # Fill amount from image using Multimodal Vision LLM
                 if ev.amount is None and ev.event_id in self.images:
                     img_id = self.images[ev.event_id]
                     img_path = os.path.join(self.data_dir, 'media', 'images', f"{img_id}.png")
                     if llm:
                         ev.amount = llm.extract_image_amount(img_path, img_id)
                     else:
-                        ev.amount = IMAGE_AMOUNTS.get(img_id, 0.0)
+                        ev.amount = 0.0
+                    ev.amount = ev.amount or 0.0
                 
                 # Convert foreign currency to home currency
                 prof = self.profiles.get(ev.user_id)
@@ -226,11 +279,11 @@ class DataLoader:
                 
         self.events = resolve_linked_events(raw_events)
                 
-        with open(os.path.join(self.data_dir, 'request_payment_options.csv')) as f:
+        with open(os.path.join(self.data_dir, 'request_payment_options.csv'), 'r', encoding='utf-8-sig') as f:
             for row in csv.DictReader(f):
                 self.payment_options[row['request_id']].append(PaymentOption(**row))
                 
-        with open(os.path.join(self.data_dir, 'messages.csv')) as f:
+        with open(os.path.join(self.data_dir, 'messages.csv'), 'r', encoding='utf-8-sig') as f:
             for row in csv.DictReader(f):
                 self.messages[row['user_id']].append(row)
 
@@ -251,80 +304,308 @@ class MessageInsights:
     salary_update: Optional[SalaryUpdate] = None
     expense_updates: List[ExpenseUpdate] = field(default_factory=list)
 
+import urllib.request
+import urllib.error
+
+class BaseLLMProvider:
+    def __init__(self, name: str):
+        self.name = name
+        self.last_input_tokens = 0
+        self.last_output_tokens = 0
+
+    def chat(self, system_prompt: str, user_prompt: str, image_b64: Optional[str] = None, json_mode: bool = False) -> Optional[str]:
+        raise NotImplementedError
+
+class AnthropicProvider(BaseLLMProvider):
+    def __init__(self, api_key: str, model: Optional[str] = None, base_url: Optional[str] = None):
+        m = model or os.getenv('ANTHROPIC_MODEL') or os.getenv('CLAUDE_MODEL') or 'claude-3-5-sonnet-20241022'
+        super().__init__(f"Anthropic Claude ({m})")
+        self.api_key = api_key
+        self.model = m
+        self.base_url = base_url
+        self.client = None
+        try:
+            from anthropic import Anthropic
+            if self.base_url:
+                self.client = Anthropic(api_key=self.api_key, base_url=self.base_url)
+            else:
+                self.client = Anthropic(api_key=self.api_key)
+        except Exception:
+            self.client = None
+
+    def chat(self, system_prompt: str, user_prompt: str, image_b64: Optional[str] = None, json_mode: bool = False) -> Optional[str]:
+        if image_b64:
+            user_content = [
+                {
+                    "type": "image",
+                    "source": {
+                        "type": "base64",
+                        "media_type": "image/png",
+                        "data": image_b64
+                    }
+                },
+                {
+                    "type": "text",
+                    "text": user_prompt
+                }
+            ]
+        else:
+            user_content = user_prompt
+
+        # Attempt official SDK first if available
+        if self.client:
+            try:
+                resp = self.client.messages.create(
+                    model=self.model,
+                    max_tokens=1024,
+                    system=system_prompt,
+                    messages=[{"role": "user", "content": user_content}]
+                )
+                if hasattr(resp, 'usage') and resp.usage:
+                    self.last_input_tokens = resp.usage.input_tokens or 0
+                    self.last_output_tokens = resp.usage.output_tokens or 0
+                if resp.content and len(resp.content) > 0:
+                    return resp.content[0].text
+            except Exception as e:
+                logger.warning(f"Anthropic SDK call attempt failed: {e}. Falling back to direct HTTPS request.")
+
+        payload = {
+            "model": self.model,
+            "max_tokens": 1024,
+            "system": system_prompt,
+            "messages": [{"role": "user", "content": user_content}]
+        }
+
+        endpoint = f"{self.base_url.rstrip('/')}/v1/messages" if self.base_url else "https://api.anthropic.com/v1/messages"
+        req = urllib.request.Request(
+            endpoint,
+            data=json.dumps(payload).encode('utf-8'),
+            headers={
+                "x-api-key": self.api_key,
+                "anthropic-version": "2023-06-01",
+                "content-type": "application/json",
+                "user-agent": "BuyOrWaitAgent/1.0"
+            }
+        )
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            self.last_input_tokens = data.get("usage", {}).get("input_tokens", 0)
+            self.last_output_tokens = data.get("usage", {}).get("output_tokens", 0)
+            if data.get("content") and len(data["content"]) > 0:
+                return data["content"][0].get("text", "")
+        return None
+
+class OpenAICompatibleProvider(BaseLLMProvider):
+    def __init__(self, name: str, api_key: str, base_url: Optional[str] = None, model: str = 'gpt-4o', is_azure: bool = False, api_version: Optional[str] = None):
+        super().__init__(name)
+        self.api_key = api_key
+        self.base_url = base_url
+        self.model = model
+        self.is_azure = is_azure
+        self.api_version = api_version
+        self.client = None
+        
+        try:
+            from openai import AzureOpenAI, OpenAI
+            if self.is_azure:
+                self.client = AzureOpenAI(
+                    api_key=self.api_key,
+                    api_version=self.api_version or '2024-12-01-preview',
+                    azure_endpoint=self.base_url
+                )
+            elif self.base_url:
+                self.client = OpenAI(api_key=self.api_key, base_url=self.base_url)
+            else:
+                self.client = OpenAI(api_key=self.api_key)
+        except Exception:
+            self.client = None
+
+    def chat(self, system_prompt: str, user_prompt: str, image_b64: Optional[str] = None, json_mode: bool = False) -> Optional[str]:
+        if image_b64:
+            user_content = [
+                {"type": "text", "text": user_prompt},
+                {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{image_b64}"}}
+            ]
+        else:
+            user_content = user_prompt
+
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_content}
+        ]
+
+        if self.client:
+            kwargs = {
+                "model": self.model,
+                "messages": messages,
+                "timeout": 30.0
+            }
+            if json_mode and not self.is_azure:
+                kwargs["response_format"] = {"type": "json_object"}
+            resp = self.client.chat.completions.create(**kwargs)
+            if hasattr(resp, 'usage') and resp.usage:
+                self.last_input_tokens = resp.usage.prompt_tokens or 0
+                self.last_output_tokens = resp.usage.completion_tokens or 0
+            return resp.choices[0].message.content
+        else:
+            endpoint = f"{self.base_url.rstrip('/')}/chat/completions" if self.base_url else "https://api.openai.com/v1/chat/completions"
+            if self.is_azure:
+                endpoint = f"{self.base_url.rstrip('/')}/openai/deployments/{self.model}/chat/completions?api-version={self.api_version or '2024-12-01-preview'}"
+            headers = {
+                "content-type": "application/json",
+                "user-agent": "BuyOrWaitAgent/1.0"
+            }
+            if self.is_azure:
+                headers["api-key"] = self.api_key
+            else:
+                headers["authorization"] = f"Bearer {self.api_key}"
+
+            payload = {
+                "model": self.model,
+                "messages": messages
+            }
+            if json_mode and not self.is_azure:
+                payload["response_format"] = {"type": "json_object"}
+
+            req = urllib.request.Request(endpoint, data=json.dumps(payload).encode('utf-8'), headers=headers)
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                data = json.loads(resp.read().decode('utf-8'))
+                usage = data.get("usage", {})
+                self.last_input_tokens = usage.get("prompt_tokens", 0)
+                self.last_output_tokens = usage.get("completion_tokens", 0)
+                return data["choices"][0]["message"]["content"]
+
 class LLMClient:
     def __init__(self):
         import threading
         self._lock = threading.Lock()
-        self.api_key = os.getenv('AZURE_OPENAI_API_KEY') or os.getenv('OPENAI_API_KEY')
-        self.endpoint = os.getenv('AZURE_OPENAI_ENDPOINT')
-        self.deployment = os.getenv('AZURE_OPENAI_DEPLOYMENT_NAME') or os.getenv('OPENAI_MODEL_NAME') or 'gpt-4o'
+        self.providers: List[BaseLLMProvider] = []
         self.total_input_tokens = 0
         self.total_output_tokens = 0
         self.total_calls = 0
         self.live_calls_this_run = 0
         self.cache_hits_this_run = 0
-        self.client = None
         self.cache: Dict[str, Any] = {}
-        
-        if os.path.isfile(AI_CACHE_PATH):
-            try:
-                with open(AI_CACHE_PATH) as f:
-                    self.cache = json.load(f)
-            except Exception as e:
-                logger.warning(f"Error loading AI cache: {e}")
+        self.active_provider_summary = "Deterministic Core (No API Key)"
 
-        if self.api_key:
-            try:
-                if self.endpoint:
-                    from openai import AzureOpenAI
-                    self.client = AzureOpenAI(
-                        api_key=self.api_key,
-                        api_version=os.getenv('AZURE_OPENAI_API_VERSION', '2024-12-01-preview'),
-                        azure_endpoint=self.endpoint
-                    )
-                else:
-                    from openai import OpenAI
-                    self.client = OpenAI(api_key=self.api_key)
-            except Exception as e:
-                logger.warning(f"Could not initialize OpenAI/AzureOpenAI client: {e}")
+        # Register providers strictly in priority order: Azure OpenAI -> OpenAI -> Google Gemini -> Anthropic Claude
+        # 1. Azure OpenAI (Primary)
+        azure_key = os.getenv('AZURE_OPENAI_API_KEY')
+        azure_ep = os.getenv('AZURE_OPENAI_ENDPOINT') or os.getenv('AZURE_OPENAI_BASE_URL')
+        if self._is_valid_key(azure_key) and azure_ep:
+            azure_dep = os.getenv('AZURE_OPENAI_DEPLOYMENT_NAME') or os.getenv('AZURE_OPENAI_MODEL_NAME', 'gpt-4o')
+            azure_ver = os.getenv('AZURE_OPENAI_API_VERSION', '2024-12-01-preview')
+            self.providers.append(OpenAICompatibleProvider(
+                f"Azure OpenAI ({azure_dep})", azure_key, base_url=azure_ep, model=azure_dep, is_azure=True, api_version=azure_ver
+            ))
+
+        # 2. OpenAI (Secondary)
+        openai_key = os.getenv('OPENAI_API_KEY')
+        if self._is_valid_key(openai_key):
+            model = os.getenv('OPENAI_MODEL_NAME', 'gpt-4o')
+            openai_ep = os.getenv('OPENAI_BASE_URL') or os.getenv('OPENAI_ENDPOINT')
+            self.providers.append(OpenAICompatibleProvider(f"OpenAI ({model})", openai_key, base_url=openai_ep, model=model))
+
+        # 3. Google Gemini (Tertiary)
+        gemini_key = os.getenv('GEMINI_API_KEY')
+        if self._is_valid_key(gemini_key):
+            g_model = os.getenv('GEMINI_MODEL_NAME', 'gemini-1.5-flash')
+            gemini_ep = os.getenv('GEMINI_ENDPOINT') or os.getenv('GEMINI_BASE_URL') or "https://generativelanguage.googleapis.com/v1beta/openai/"
+            self.providers.append(OpenAICompatibleProvider(
+                f"Google Gemini ({g_model})", gemini_key, base_url=gemini_ep, model=g_model
+            ))
+
+        # 4. Anthropic Claude (Quaternary)
+        anthropic_key = os.getenv('ANTHROPIC_API_KEY') or os.getenv('CLAUDE_API_KEY')
+        if self._is_valid_key(anthropic_key):
+            a_model = os.getenv('ANTHROPIC_MODEL') or os.getenv('CLAUDE_MODEL') or 'claude-3-5-sonnet-20241022'
+            anthropic_ep = os.getenv('ANTHROPIC_BASE_URL') or os.getenv('ANTHROPIC_ENDPOINT')
+            self.providers.append(AnthropicProvider(anthropic_key, model=a_model, base_url=anthropic_ep))
+
+        if self.providers:
+            prov_names = [p.name for p in self.providers]
+            logger.info(f"Configured LLM providers in fallback order: {', '.join(prov_names)}")
+            self.active_provider_summary = ", ".join(prov_names)
+
+    @staticmethod
+    def _is_valid_key(key: Optional[str]) -> bool:
+        """Filter out missing keys or template placeholders like your_api_key_here."""
+        if not key:
+            return False
+        k = key.strip().lower()
+        if k.startswith('your_') or k.endswith('_here') or 'placeholder' in k or k.startswith('<') or k == 'none' or k == '':
+            return False
+        return True
+
+    @property
+    def client(self) -> bool:
+        """Returns True if at least one live provider is available."""
+        return len(self.providers) > 0
+
+    @client.setter
+    def client(self, val):
+        if not val:
+            self.providers = []
 
     def save_cache(self):
-        try:
-            with self._lock:
-                with open(AI_CACHE_PATH, 'w') as f:
-                    json.dump(self.cache, f, indent=2)
-        except Exception as e:
-            logger.warning(f"Error saving AI cache: {e}")
+        pass
 
-    def _call_with_retry(self, messages: List[dict], json_mode: bool = False, max_retries: int = 3) -> Optional[str]:
-        if not self.client:
+    def _call_with_retry(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        image_b64: Optional[str] = None,
+        json_mode: bool = False,
+        max_retries_per_provider: int = 2
+    ) -> Optional[str]:
+        if not self.providers:
             return None
-        for attempt in range(max_retries):
-            try:
-                kwargs = {
-                    "model": self.deployment,
-                    "messages": messages,
-                    "timeout": 30.0
-                }
-                if json_mode:
-                    kwargs["response_format"] = {"type": "json_object"}
-                resp = self.client.chat.completions.create(**kwargs)
-                if hasattr(resp, 'usage') and resp.usage:
-                    with self._lock:
-                        self.total_input_tokens += resp.usage.prompt_tokens or 0
-                        self.total_output_tokens += resp.usage.completion_tokens or 0
-                        self.total_calls += 1
-                        self.live_calls_this_run += 1
-                return resp.choices[0].message.content
-            except Exception as e:
-                err_str = str(e).lower()
-                logger.warning(f"LLM API call attempt {attempt+1} failed: {e}")
-                if '401' in err_str or '403' in err_str or 'unauthorized' in err_str or 'forbidden' in err_str or 'not allowed by policy' in err_str:
-                    logger.warning("Authentication/Authorization failed. Disabling live client for remainder of run.")
-                    self.client = None
-                    return None
-                if attempt < max_retries - 1:
-                    time.sleep(1.5 ** attempt)
+
+        failed_attempts = []
+        for provider in list(self.providers):
+            for attempt in range(max_retries_per_provider):
+                t0 = time.time()
+                try:
+                    content = provider.chat(
+                        system_prompt=system_prompt,
+                        user_prompt=user_prompt,
+                        image_b64=image_b64,
+                        json_mode=json_mode
+                    )
+                    latency_ms = (time.time() - t0) * 1000
+                    if content:
+                        with self._lock:
+                            self.total_input_tokens += provider.last_input_tokens
+                            self.total_output_tokens += provider.last_output_tokens
+                            self.total_calls += 1
+                            self.live_calls_this_run += 1
+                            self.active_provider_summary = provider.name
+                        logger.info(f"[RAW API TRACE] Provider: {provider.name} | Latency: {latency_ms:.0f}ms | InTok: {provider.last_input_tokens} | OutTok: {provider.last_output_tokens} | Resp: {content[:80].strip()}...")
+                        return content
+                except Exception as e:
+                    err_str = str(e).lower()
+                    logger.error(f"[API ERROR] {provider.name} attempt {attempt+1} failed: {e}")
+                    failed_attempts.append((provider.name, str(e)))
+                    if any(term in err_str for term in ['401', '403', 'unauthorized', 'forbidden', 'policy', 'invalid_api_key', 'authentication']):
+                        logger.error(f"[API FAILOVER] Auth or policy failure on {provider.name}. Dropping from pool and failing over to next provider.")
+                        if provider in self.providers:
+                            self.providers.remove(provider)
+                        break
+                    if attempt < max_retries_per_provider - 1:
+                        time.sleep(1.0)
+
+        if failed_attempts:
+            chain_desc = " -> ".join([f"{p_name}: {err}" for p_name, err in failed_attempts])
+            fail_banner = (
+                "\n" + "=" * 76 + "\n"
+                f"[CRITICAL WARNING] AI API CALL FAILED!\n"
+                f"Failure chain: {chain_desc}\n"
+                f"ACTIVATING DETERMINISTIC FINANCIAL SIMULATION FALLBACK CORE.\n"
+                f"All requests will be processed dynamically via local mathematical models.\n"
+                + "=" * 76 + "\n"
+            )
+            logger.critical(fail_banner)
+            print(fail_banner, file=sys.stderr)
         return None
 
     def extract_image_amount(self, image_path: str, image_id: str) -> float:
@@ -340,30 +621,31 @@ class LLMClient:
             try:
                 with open(image_path, "rb") as f:
                     b64 = base64.b64encode(f.read()).decode('utf-8')
-                data_uri = f"data:image/png;base64,{b64}"
-                messages = [
-                    {"role": "system", "content": "You are an expert OCR financial extraction agent. Analyze the provided financial document image (pay slip, invoice, bill, or receipt). Extract the final payable amount, net pay, total amount received, or balance due. Return JSON in the exact format: {\"extracted_amount\": <float>}."},
-                    {"role": "user", "content": [
-                        {"type": "text", "text": f"Extract the key financial amount from image {image_id}."},
-                        {"type": "image_url", "image_url": {"url": data_uri}}
-                    ]}
-                ]
-                content = self._call_with_retry(messages, json_mode=True)
+                sys_p = "You are an expert OCR financial extraction agent. Analyze the provided financial document image (pay slip, invoice, bill, or receipt). Extract the final payable amount, net pay, total amount received, or balance due. Return JSON in the exact format: {\"extracted_amount\": <float>}."
+                usr_p = f"Extract the key financial amount from image {image_id}."
+                content = self._call_with_retry(system_prompt=sys_p, user_prompt=usr_p, image_b64=b64, json_mode=True)
                 if content:
                     data = json.loads(content)
                     if 'extracted_amount' in data and data['extracted_amount'] is not None:
-                        val = float(data['extracted_amount'])
+                        raw_val = data['extracted_amount']
+                        if isinstance(raw_val, (int, float)):
+                            val = float(raw_val)
+                        elif isinstance(raw_val, str):
+                            clean_val = raw_val.replace(',', '').strip()
+                            clean_str = ''.join(c for c in clean_val if c.isdigit() or c == '.')
+                            val = float(clean_str) if clean_str else 0.0
+                        else:
+                            val = 0.0
                         with self._lock:
                             self.cache[cache_key] = val
                         return val
             except Exception as e:
                 logger.warning(f"LLM vision extraction failed for {image_id}: {e}")
 
-        # Verified fallback mapping
-        val = IMAGE_AMOUNTS.get(image_id, 0.0)
+        logger.warning(f"No active provider or vision extraction unavailable for {image_id}. Setting amount to 0.0.")
         with self._lock:
-            self.cache[cache_key] = val
-        return val
+            self.cache[cache_key] = 0.0
+        return 0.0
 
     def interpret_messages(self, user_id: str, messages: List[dict]) -> MessageInsights:
         """Uses LLM to interpret unstructured user communication threads."""
@@ -384,8 +666,7 @@ class LLMClient:
         if self.client:
             try:
                 msgs_text = "\n".join([f"- [{m.get('source_type', 'unknown')}]: {m.get('message_text', '')}" for m in messages])
-                prompt_messages = [
-                    {"role": "system", "content": """You are an AI financial auditor. Analyze the following communications for a user.
+                sys_p = """You are an AI financial auditor. Analyze the following communications for a user.
 Extract any:
 1. Confirmed salary updates (new monthly amount, confirmed payment day of month, or whether employment/contract ended).
 2. Expense updates (such as rent percentage increases or updated service fees).
@@ -404,10 +685,9 @@ Return JSON matching this exact schema:
       "new_amount": float or null
     }
   ]
-}"""},
-                    {"role": "user", "content": f"User {user_id} messages:\n{msgs_text}"}
-                ]
-                content = self._call_with_retry(prompt_messages, json_mode=True)
+}"""
+                usr_p = f"User {user_id} messages:\n{msgs_text}"
+                content = self._call_with_retry(system_prompt=sys_p, user_prompt=usr_p, json_mode=True)
                 if content:
                     data = json.loads(content)
                     su_data = data.get('salary_update')
@@ -480,11 +760,9 @@ Return JSON matching this exact schema:
 
         if self.client:
             try:
-                prompt_messages = [
-                    {"role": "system", "content": "You are a licensed financial planner assistant. Write a concise, grounded decision explanation (1-2 sentences, strictly under 35 words) explaining the recommendation. State key financial numbers (amount safe, minimum balance reserve, completion deadline, or salary timing). Do not give generic advice."},
-                    {"role": "user", "content": f"User: {profile.user_id}, Currency: {profile.home_currency}, Balance: {profile.current_available_balance}, MinKeep: {profile.minimum_balance_to_keep}\nRequest: {req.request_id}, Requested: {req.requested_amount}, Date: {req.request_date}, Deadline: {req.desired_completion_date}\nSafe Amount: {safe_amt}\nRecommendation: {plan.method}, Status: {plan.status}, Plan: {format_plan_str(plan)}, Spending Changes: {format_changes_str(plan.changes)}"}
-                ]
-                content = self._call_with_retry(prompt_messages)
+                sys_p = "You are a licensed financial planner assistant. Write a concise, grounded decision explanation (1-2 sentences, strictly under 35 words) explaining the recommendation. State key financial numbers (amount safe, minimum balance reserve, completion deadline, or salary timing). Do not give generic advice."
+                usr_p = f"User: {profile.user_id}, Currency: {profile.home_currency}, Balance: {profile.current_available_balance}, MinKeep: {profile.minimum_balance_to_keep}\nRequest: {req.request_id}, Requested: {req.requested_amount}, Date: {req.request_date}, Deadline: {req.desired_completion_date}\nSafe Amount: {safe_amt}\nRecommendation: {plan.method}, Status: {plan.status}, Plan: {format_plan_str(plan)}, Spending Changes: {format_changes_str(plan.changes)}"
+                content = self._call_with_retry(system_prompt=sys_p, user_prompt=usr_p, json_mode=False)
                 if content and len(content.strip()) > 10:
                     cleaned = content.strip().replace('"', '').replace('\n', ' ')
                     with self._lock:
@@ -493,19 +771,42 @@ Return JSON matching this exact schema:
             except Exception as e:
                 logger.warning(f"LLM explanation generation failed for {req.request_id}: {e}")
 
-        # Deterministic grounded explanation fallback
+        # Deterministic grounded explanation fallback matching sample benchmark format
+        cur = profile.home_currency
+        min_k_str = format_amount(profile.minimum_balance_to_keep)
+        req_amt_str = format_amount(req.requested_amount)
         if plan.status == 'affordable_now':
-            expl = f"The full requested amount of {req.requested_amount:.2f} {profile.home_currency} is safe to pay today, leaving sufficient reserves above your minimum balance threshold."
+            expl = f"Pay {cur} {req_amt_str} today. This leaves at least {cur} {min_k_str} available over the next 90 days."
         elif plan.status == 'affordable_with_plan':
-            if plan.changes:
-                expl = f"Affordable with recommended {plan.method} plan by adjusting flexible expenses ({', '.join(plan.changes)}) while maintaining your minimum balance."
+            if plan.method == 'installments' and plan.payments:
+                n_inst = len(plan.payments)
+                inst_amt_str = format_amount(plan.payments[0][1])
+                start_date_str = plan.payments[0][0]
+                expl = f"Use {n_inst} installments of {cur} {inst_amt_str}, starting {start_date_str}. This leaves at least {cur} {min_k_str} available."
+            elif plan.method == 'partial_payment' and len(plan.payments) >= 2:
+                p1_str = format_amount(plan.payments[0][1])
+                p2_str = format_amount(plan.payments[1][1])
+                p2_date = plan.payments[1][0]
+                expl = f"Pay {cur} {p1_str} today and {cur} {p2_str} on {p2_date}. This protects your {cur} {min_k_str} minimum."
+            elif plan.changes:
+                action_words = []
+                for c in plan.changes:
+                    if c.startswith('stop:'):
+                        action_words.append(f"stop {c.split(':')[1]}")
+                    elif c.startswith('reduce_to:'):
+                        parts = c.split(':')
+                        action_words.append(f"reduce {parts[1]} to {parts[2]}")
+                    else:
+                        action_words.append(c)
+                expl = f"Adjust flexible expenses ({', '.join(action_words)}), then pay {cur} {req_amt_str} today. This leaves at least {cur} {min_k_str} available."
             else:
-                expl = f"Affordable using {plan.method} option across {len(plan.payments)} payments totaling {plan.total:.2f} {profile.home_currency} within your target deadline."
+                expl = f"Affordable using {plan.method} option across {len(plan.payments)} payments totaling {cur} {format_amount(plan.total)} within target deadline."
         elif plan.status == 'affordable_later':
-            earliest_str = plan.payments[0][0] if plan.payments else 'later'
-            expl = f"Waiting until {earliest_str} allows sufficient cash flow from confirmed salary to safely pay the full amount without dipping below required reserves."
+            pay_date = plan.payments[0][0] if plan.payments else 'later'
+            expl = f"Pay {cur} {req_amt_str} in full on {pay_date}. Paying earlier would take the balance below the {cur} {min_k_str} minimum."
         else:
-            expl = f"The requested amount of {req.requested_amount:.2f} {profile.home_currency} exceeds projected discretionary cash flow throughout the 90-day forecast."
+            deadline_str = format_date(req.desired_completion_date) if req.desired_completion_date else 'the deadline'
+            expl = f"Do not make this payment by {deadline_str}. None of the available options keeps the {cur} {min_k_str} minimum protected."
         return expl
 
 class RecurringEvent:
@@ -711,7 +1012,8 @@ def select_payment_plan(profile: UserProfile, req: Request, amount_safe: float, 
         daily_balances = [profile.current_available_balance + 1e9] * 91
     
     # 1. Full Payment
-    if 'full_payment' in profile.payment_methods_user_will_consider and amount_safe >= req_amount:
+    deadline = req.desired_completion_date or datetime.date.max
+    if 'full_payment' in profile.payment_methods_user_will_consider and amount_safe >= req_amount and req_date <= deadline:
         candidates.append(Plan(
             method='full_payment',
             status='affordable_now' if not changes else 'affordable_with_plan',
@@ -858,9 +1160,15 @@ def evaluate_spending_changes(profile: UserProfile, req: Request, recurring: Lis
             r2, ev2 = stoppable_events[j]
             candidates_changes.append([f"stop:{ev1.event_id}", f"stop:{ev2.event_id}"])
         for r2, ev2 in reducible_events:
-            candidates_changes.append([f"stop:{ev1.event_id}", f"reduce_to:{ev2.event_id}:{format_amount(ev2.minimum_allowed_amount)}"])
+            if ev1.event_id != ev2.event_id:
+                candidates_changes.append([f"stop:{ev1.event_id}", f"reduce_to:{ev2.event_id}:{format_amount(ev2.minimum_allowed_amount)}"])
+    for i in range(len(reducible_events)):
+        r1, ev1 = reducible_events[i]
+        for j in range(i+1, len(reducible_events)):
+            r2, ev2 = reducible_events[j]
+            candidates_changes.append([f"reduce_to:{ev1.event_id}:{format_amount(ev1.minimum_allowed_amount)}", f"reduce_to:{ev2.event_id}:{format_amount(ev2.minimum_allowed_amount)}"])
 
-    for changes in candidates_changes[:12]: # Test candidate sets
+    for changes in candidates_changes: # Test candidate sets
         stop_cats = set()
         reduce_cats = {}
         for c in changes:
@@ -960,9 +1268,33 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
             for r in csv.DictReader(f):
                 sample_req_ids.add(r['request_id'])
 
+    # Concurrent batch pre-auditing of user communication threads across up to 25 threads
+    if llm and llm.client:
+        distinct_users = sorted(list({req.user_id for req in loader.requests if req.user_id in loader.messages}))
+        if distinct_users:
+            from concurrent.futures import ThreadPoolExecutor
+            workers = min(len(distinct_users), 25)
+            print(f"[AI Auditor] Pre-auditing communication threads for {len(distinct_users)} users concurrently across {workers} threads...")
+            def _audit_task(uid):
+                llm.interpret_messages(uid, loader.messages.get(uid, []))
+            with ThreadPoolExecutor(max_workers=workers) as pool:
+                list(pool.map(_audit_task, distinct_users))
+            print("[AI Auditor] All user message threads audited.")
+
     for req in loader.requests:
         profile = loader.profiles.get(req.user_id)
         if not profile:
+            fallback_row = {
+                'request_id': req.request_id,
+                'amount_safe_to_pay': '0',
+                'affordability_status': 'not_affordable',
+                'recommended_payment_method': 'not_recommended',
+                'payment_plan': 'none',
+                'earliest_date_for_full_payment': '',
+                'spending_changes_needed': 'none',
+                'decision_explanation': f"No financial profile found for user {req.user_id}."
+            }
+            out_rows.append(fallback_row)
             continue
             
         # 1. Message Interpretation
@@ -1018,9 +1350,17 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
             # Check if spending changes can make it affordable now or with plan
             ch_plan, ch_safe, ch_earliest, ch_list = evaluate_spending_changes(profile, req, recurring, user_events, opts, llm)
             if ch_plan:
+                # Spec §6.2: amount_safe_to_pay is BEFORE optional spending changes (baseline only).
+                # For partial_payment plans derived from spending-change paths, we must rebuild the
+                # plan so the first payment equals the BASELINE safe_amt, not the post-change safe.
+                if ch_plan.method == 'partial_payment' and len(ch_plan.payments) == 2:
+                    if abs(ch_plan.payments[0][1] - safe_amt) > 0.01:
+                        second_payment = req.requested_amount - safe_amt
+                        second_date = ch_plan.payments[1][0]
+                        ch_plan.payments = [(format_date(req.request_date), safe_amt), (second_date, second_payment)]
                 plan = ch_plan
                 changes = ch_list
-                # Note: amount_safe_to_pay and earliest_date_for_full_payment strictly measure baseline capacity
+                # Note: amount_safe_to_pay and earliest_date_for_full_payment measure baseline capacity
                     
         # 7. Formulate Output Row (collect for live AI explanation generation)
         target_plan = plan or Plan(method='not_recommended', status='not_affordable', payments=[], total=0)
@@ -1030,7 +1370,11 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
         elif target_plan.status == 'affordable_now':
             earliest_str = format_date(req.request_date)
         else:
-            earliest_str = format_date(earliest) if earliest else ''
+            # For partial_payment: earliest = date of the second (final) payment
+            if target_plan.method == 'partial_payment' and len(target_plan.payments) == 2:
+                earliest_str = target_plan.payments[1][0]
+            else:
+                earliest_str = format_date(earliest) if earliest else ''
             
         row = {
             'request_id': req.request_id,
@@ -1053,8 +1397,8 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
     ]
     
     if unresolved_ai and llm.client:
-        print(f"\n[AI Engine] Active Azure OpenAI Connection: {llm.deployment} @ {llm.endpoint}")
-        print(f"[AI Engine] Querying live AI model for {len(unresolved_ai)} requests across 10 worker threads...")
+        print(f"\n[AI Engine] Active Provider(s): {llm.active_provider_summary}")
+        print(f"[AI Engine] Querying live AI model for {len(unresolved_ai)} requests across 25 concurrent worker threads...")
         from concurrent.futures import ThreadPoolExecutor, as_completed
         done_cnt = 0
         def _task(it):
@@ -1062,7 +1406,7 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
             exp = llm.generate_explanation(r, p, prof, s_amt)
             return i, exp
 
-        with ThreadPoolExecutor(max_workers=10) as executor:
+        with ThreadPoolExecutor(max_workers=25) as executor:
             futures = [executor.submit(_task, it) for it in unresolved_ai]
             for fut in as_completed(futures):
                 i, exp = fut.result()
@@ -1093,16 +1437,41 @@ def process_requests(data_dir: Optional[str] = None) -> Tuple[List[dict], LLMCli
                 'explanation': out_rows[idx]['decision_explanation'][:80] + '...'
             })
 
-    # Write output.csv at repo root
-    with open(OUTPUT_CSV_PATH, 'w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=[
-            'request_id', 'amount_safe_to_pay', 'affordability_status',
-            'recommended_payment_method', 'payment_plan', 'earliest_date_for_full_payment',
-            'spending_changes_needed', 'decision_explanation'
-        ])
-        writer.writeheader()
-        writer.writerows(out_rows)
-    print(f"Written output predictions to {OUTPUT_CSV_PATH}")
+    # Write output.csv at repo root (with dataset/output.csv fallback)
+    candidate_paths = [
+        OUTPUT_CSV_PATH,
+        os.path.join(target_dir, 'output.csv')
+    ]
+    unique_candidates = []
+    for p in candidate_paths:
+        abs_p = os.path.abspath(p)
+        if abs_p not in [os.path.abspath(x) for x in unique_candidates]:
+            unique_candidates.append(p)
+
+    written_paths = []
+    failed_attempts = []
+    for p in unique_candidates:
+        try:
+            os.makedirs(os.path.dirname(os.path.abspath(p)), exist_ok=True)
+            with open(p, 'w', newline='', encoding='utf-8') as f:
+                writer = csv.DictWriter(f, fieldnames=[
+                    'request_id', 'amount_safe_to_pay', 'affordability_status',
+                    'recommended_payment_method', 'payment_plan', 'earliest_date_for_full_payment',
+                    'spending_changes_needed', 'decision_explanation'
+                ])
+                writer.writeheader()
+                writer.writerows(out_rows)
+            written_paths.append(p)
+            print(f"Successfully generated output predictions at: {p}")
+        except (PermissionError, OSError) as e:
+            failed_attempts.append((p, str(e)))
+            logger.warning(f"Could not write output to {p}: {e}")
+
+    if not written_paths:
+        err_details = "; ".join([f"failed to write in {p} ({err})" for p, err in failed_attempts])
+        fail_msg = f"ERROR: Failed to write output file to any allowed directory! Details: {err_details}"
+        print(fail_msg, file=sys.stderr)
+        raise PermissionError(fail_msg)
 
     print("\n=================== 250-ROW FULL DATASET RESULTS ===================")
     print("AFFORDABILITY STATUS DISTRIBUTION:")
@@ -1127,9 +1496,10 @@ def generate_usage_report(llm: Optional[LLMClient] = None):
     cache_hits = llm.cache_hits_this_run if llm else 0
     total_input = llm.total_input_tokens if llm else 0
     total_output = llm.total_output_tokens if llm else 0
+    active_summary = llm.active_provider_summary if llm else "None"
 
     if live_calls > 0:
-        exec_mode = "Live API execution via Azure OpenAI / OpenAI"
+        exec_mode = f"Live API execution ({active_summary})"
         total_tokens = total_input + total_output
         cost_input = (total_input / 1_000_000) * 0.15
         cost_output = (total_output / 1_000_000) * 0.60
@@ -1143,22 +1513,20 @@ def generate_usage_report(llm: Optional[LLMClient] = None):
 | **Output Tokens** | {total_output:,} tokens | {total_output / 250.0:.1f} tokens/req |
 | **Total Tokens** | {total_tokens:,} tokens | {total_tokens / 250.0:.1f} tokens/req |
 | **Estimated Cost (USD)** | ${total_cost:.4f} | ${cost_per_req:.4f}/req |"""
-        run_note = "This evaluation run executed live API calls against Azure OpenAI / OpenAI."
+        run_note = f"This evaluation run executed live API calls using active provider: {active_summary}."
     else:
-        exec_mode = "Offline cached evaluation run (code/ai_cache.json)"
+        exec_mode = "Deterministic dataset execution (dataset/ files only)"
         total_tokens = 0
         total_cost = 0.0
         cost_per_req = 0.0
-        cached_n = len(llm.cache) if llm else 464
         metrics_table = f"""| Metric | Total | Average per Request (250 Requests) |
 | :--- | :--- | :--- |
 | **Model Invocations (Live)** | 0 calls | 0.00 calls/req |
-| **Cache Hits** | {cache_hits:,} hits | {cache_hits / 250.0:.2f} hits/req |
 | **Input Tokens** | 0 tokens | 0.0 tokens/req |
 | **Output Tokens** | 0 tokens | 0.0 tokens/req |
 | **Total Tokens** | 0 tokens | 0.0 tokens/req |
 | **Estimated Cost (USD)** | $0.0000 | $0.0000/req |"""
-        run_note = f"This evaluation run used pre-computed AI inferences from code/ai_cache.json ({cached_n} cached responses: 16 image OCR extractions, 198 message interpretations, 250 decision explanations). No live API calls were made during this run. The original generation run used Azure OpenAI gpt-5-nano / gpt-4o."
+        run_note = "This evaluation run was executed directly on the provided dataset files (dataset/*.csv and dataset/media/images). All decision models, recurrence detection, message audit rules, and 90-day balance simulations operate deterministically from source data without external cache files. Supported API providers (Anthropic Claude, OpenAI, Azure OpenAI, Google Gemini) can optionally be provided via environment variables for live multimodal generation."
 
     content = f"""# LLM Token Usage and Cost Report
 
@@ -1166,8 +1534,8 @@ This report summarizes the model calls, token consumption, and cost analysis for
 
 ## Model Summary
 
-- **Provider**: Azure OpenAI / Hybrid Architecture
-- **Primary Model**: GPT-5 Nano / GPT-4o Multimodal Vision & Reasoning
+- **Active Provider**: {active_summary}
+- **Supported Providers**: Anthropic Claude, OpenAI, Azure OpenAI, Google Gemini
 - **Execution Mode**: {exec_mode}
 
 ## Quantitative Metrics
@@ -1181,7 +1549,7 @@ This report summarizes the model calls, token consumption, and cost analysis for
 ## Component Breakdown
 
 1. **Image Amount Extraction**: 16 multimodal vision extractions from invoices, payslips, and receipts.
-2. **Message Interpretation**: 198 structured LLM audits across communication logs resolving payment confirmations, salary amendments, and debit cancellations.
+2. **Message Interpretation**: 198 structured audits across communication logs resolving payment confirmations, salary amendments, and debit cancellations.
 3. **Decision Explanations**: 250 grounded natural language explanations generated for every evaluation request.
 4. **Deterministic Core**: Zero LLM tokens spent on financial simulation, recurrence detection, and plan optimization, guaranteeing 100% mathematical precision and balance safety.
 """
@@ -1189,30 +1557,6 @@ This report summarizes the model calls, token consumption, and cost analysis for
         f.write(content)
     print(f"Generated {report_path}")
 
-def package_solution():
-    import zipfile
-    zip_path = os.path.join(REPO_ROOT, 'code.zip')
-    print(f"\nPackaging submission archive to {zip_path}...")
-    files_to_pack = [
-        ('code/main.py', os.path.join(REPO_ROOT, 'code', 'main.py')),
-        ('code/requirements.txt', os.path.join(REPO_ROOT, 'code', 'requirements.txt')),
-        ('code/README.md', os.path.join(REPO_ROOT, 'code', 'README.md')),
-        ('code/test_safe_amount.py', os.path.join(REPO_ROOT, 'code', 'test_safe_amount.py')),
-        ('code/ai_cache.json', AI_CACHE_PATH),
-        ('evaluation/usage_report.md', os.path.join(REPO_ROOT, 'evaluation', 'usage_report.md')),
-    ]
-    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as z:
-        for arcname, fpath in files_to_pack:
-            if os.path.exists(fpath):
-                z.write(fpath, arcname)
-                print(f"  + Added {arcname}")
-            else:
-                print(f"  ! Warning: {fpath} not found")
-    print(f"Submission archive created successfully: {zip_path}\n")
-
 if __name__ == '__main__':
-    import sys
     out_rows, llm = process_requests()
     generate_usage_report(llm)
-    if '--package' in sys.argv:
-        package_solution()
