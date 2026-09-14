@@ -1,4 +1,4 @@
-# Sensitive files and hackathon rules
+# Sensitive files and credentials
 log.txt
 .env
 .env.*
@@ -7,18 +7,47 @@ log.txt
 code/.env
 code/.env.local
 *.env
+*.pem
+*.key
+*.cert
 !.env.example
 !code/.env.example
 
-# Python environment & cache
+# Python virtual environments & packages
 venv/
+.venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Python cache & test artifacts
 __pycache__/
 *.py[cod]
 *$py.class
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
 # OS artifacts
 .DS_Store
 *.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Logs & temporary files
 *.log
 run.log
+scratch/
+tmp/
+
